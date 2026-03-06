@@ -20,6 +20,7 @@ export interface StoreState {
     activeCorrelationId: string | null;
     healthGaps: string[];
     isCorrelated: boolean;
+    showBrief: boolean;
 }
 
 interface StoreContextValue {
@@ -38,6 +39,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         ...initialState,
         activeCorrelationId: null,
         isCorrelated: false,
+        showBrief: false, // Hidden by default for the demo flow
     });
 
     const setActiveCorrelation = (id: string | null) => {

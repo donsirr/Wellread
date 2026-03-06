@@ -74,7 +74,15 @@ export default function ConsultationBrief() {
     const toggleItem = (i: number) => setCheckedItems((p) => ({ ...p, [i]: !p[i] }));
 
     return (
-        <section id="consultation-brief">
+        <section
+            id="consultation-brief"
+            style={{
+                opacity: state.showBrief ? 1 : 0.05,
+                pointerEvents: state.showBrief ? "auto" : "none",
+                transition: "opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                filter: state.showBrief ? "none" : "blur(2px)",
+            }}
+        >
             {/* Panel header */}
             <div
                 className="flex items-center justify-between"

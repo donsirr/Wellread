@@ -245,7 +245,7 @@ export default function VitalityGrid() {
                 {vitals.map((m) => (
                     <div
                         key={m.id}
-                        id={`metric-${m.id}`}
+                        id={m.id}
                         className={`card card-glow ${m.isAlert ? "clinical-alert" : ""}`}
                         style={{ padding: "16px", position: "relative" }}
                     >

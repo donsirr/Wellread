@@ -6,6 +6,8 @@ import SourceArchive from "./SourceArchive";
 import ConsultationBrief from "./ConsultationBrief";
 import PrivacyGuard from "./PrivacyGuard";
 import SemanticSearch from "./SemanticSearch";
+import DemoController from "./DemoController";
+import CorrelationLines from "./CorrelationLines";
 import { useStore } from "./StoreContext";
 
 export default function DashboardContent() {
@@ -86,6 +88,12 @@ export default function DashboardContent() {
                     <ConsultationBrief />
                 </div>
             </aside>
+
+            {/* Glowing magic correlation lines */}
+            <CorrelationLines />
+
+            {/* Hidden Demo Controller (Ctrl+D to toggle) */}
+            <DemoController />
         </div>
     );
 }
