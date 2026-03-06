@@ -8,6 +8,7 @@ import PrivacyGuard from "./PrivacyGuard";
 import SemanticSearch from "./SemanticSearch";
 import DemoController from "./DemoController";
 import CorrelationLines from "./CorrelationLines";
+import PatientBadge from "./PatientBadge";
 import { useStore } from "./StoreContext";
 
 export default function DashboardContent() {
@@ -17,10 +18,13 @@ export default function DashboardContent() {
             {/* ── Left Panel — Source Archive ── */}
             <aside className="panel panel-left">
                 <div style={{ padding: "20px 16px" }}>
-                    {/* Panel header */}
+                    {/* Patient Identity Badge */}
+                    <PatientBadge />
+
+                    {/* Panel header — Sources */}
                     <div
                         className="flex items-center justify-between"
-                        style={{ padding: "0 4px", marginBottom: "20px" }}
+                        style={{ padding: "0 4px", margin: "24px 0 16px" }}
                     >
                         <h2
                             style={{

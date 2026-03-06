@@ -190,7 +190,27 @@ function ReportModal({ onClose }: { onClose: () => void }) {
     };
 
     const handlePrint = () => {
-        window.print();
+        const content = printRef.current;
+        if (!content) return;
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) return;
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>WellRead Clinical Summary</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; padding: 40px; color: #333; }
+                    @media print { body { padding: 20px; } }
+                </style>
+            </head>
+            <body>${content.innerHTML}</body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => { printWindow.print(); }, 400);
     };
 
     // Escape key
@@ -252,10 +272,12 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                         alignItems: "center",
                         justifyContent: "space-between",
                         padding: "16px 24px",
-                        borderBottom: "1px solid #F0F0F0",
+                        borderBottom: "1px solid rgba(240,240,240,0.6)",
                         position: "sticky",
                         top: 0,
-                        background: "white",
+                        background: "rgba(255, 255, 255, 0.85)",
+                        backdropFilter: "blur(16px) saturate(180%)",
+                        WebkitBackdropFilter: "blur(16px) saturate(180%)",
                         borderRadius: "20px 20px 0 0",
                         zIndex: 2,
                     }}
@@ -482,10 +504,12 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                         justifyContent: "flex-end",
                         gap: "10px",
                         padding: "16px 24px",
-                        borderTop: "1px solid #F0F0F0",
+                        borderTop: "1px solid rgba(240,240,240,0.6)",
                         position: "sticky",
                         bottom: 0,
-                        background: "white",
+                        background: "rgba(255, 255, 255, 0.85)",
+                        backdropFilter: "blur(16px) saturate(180%)",
+                        WebkitBackdropFilter: "blur(16px) saturate(180%)",
                         borderRadius: "0 0 20px 20px",
                     }}
                 >
@@ -568,11 +592,6 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                 @keyframes report-enter {
                     from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
                     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                }
-                @media print {
-                    body * { visibility: hidden !important; }
-                    #physician-report-content, #physician-report-content * { visibility: visible !important; }
-                    #physician-report-content { position: absolute; left: 0; top: 0; width: 100%; }
                 }
             `}</style>
         </>

@@ -105,32 +105,108 @@ export default function SourceArchive() {
 
     return (
         <div id="source-archive" className="flex flex-col gap-2">
-            {/* Run Button (for simulation demo) */}
+            {/* Sync Button — High-Gloss Primary */}
             <button
                 onClick={() => {
                     if (state.currentStep === 0 || isFinished) startAutoDemo();
                 }}
                 disabled={isRunning}
                 style={{
-                    marginBottom: "8px",
-                    padding: "6px 12px",
-                    fontSize: "12px",
+                    marginBottom: isRunning ? "0" : "8px",
+                    padding: "12px 16px",
+                    fontSize: "13px",
                     fontWeight: 600,
-                    borderRadius: "6px",
-                    background: isRunning ? "var(--color-surface-secondary)" : "var(--color-primary)",
+                    borderRadius: "12px",
+                    backgroundColor: isRunning ? "var(--color-surface-secondary)" : undefined,
+                    backgroundImage: isRunning
+                        ? "none"
+                        : "linear-gradient(135deg, #0066FF 0%, #3385FF 50%, #0066FF 100%)",
+                    backgroundSize: "200% 100%",
                     color: isRunning ? "var(--color-muted)" : "white",
                     cursor: isRunning ? "default" : "pointer",
-                    border: "none"
+                    border: isRunning ? "1px solid var(--color-border)" : "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    position: "relative",
+                    overflow: "hidden",
+                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                    boxShadow: isRunning ? "none" : "0 4px 16px rgba(0, 102, 255, 0.35)",
+                    letterSpacing: "-0.01em",
+                }}
+                onMouseEnter={(e) => {
+                    if (!isRunning) {
+                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 102, 255, 0.45)";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                        e.currentTarget.style.filter = "brightness(1.08)";
+                    }
+                }}
+                onMouseLeave={(e) => {
+                    if (!isRunning) {
+                        e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 102, 255, 0.35)";
+                        e.currentTarget.style.transform = "none";
+                        e.currentTarget.style.filter = "none";
+                    }
                 }}
             >
-                {isRunning ? "Intelligence Syncing..." : isFinished ? "Restart Sync" : "Simulate MCP Sync"}
+                {/* Gloss overlay */}
+                {!isRunning && (
+                    <span
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%)",
+                            borderRadius: "12px",
+                            pointerEvents: "none",
+                        }}
+                    />
+                )}
+
+                {isRunning ? (
+                    <>
+                        {/* Spinner */}
+                        <svg width="14" height="14" viewBox="0 0 14 14" style={{ animation: "spin-sync 1s linear infinite" }}>
+                            <circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeDasharray="20 12" strokeLinecap="round" />
+                        </svg>
+                        <span style={{ position: "relative" }}>Analyzing Local Context...</span>
+                    </>
+                ) : (
+                    <>
+                        {/* Play icon */}
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ position: "relative" }}>
+                            <path d="M3.5 2.5L11.5 7L3.5 11.5V2.5Z" fill="white" strokeLinejoin="round" />
+                        </svg>
+                        <span style={{ position: "relative" }}>{isFinished ? "Restart Sync" : "Simulate MCP Sync"}</span>
+                    </>
+                )}
             </button>
 
             {isRunning && (
-                <div style={{ padding: "8px", fontSize: "11px", color: "var(--color-primary)", background: "var(--color-primary-soft)", borderRadius: "6px", marginBottom: "8px" }}>
+                <div
+                    style={{
+                        padding: "8px 12px",
+                        fontSize: "11px",
+                        color: "var(--color-primary)",
+                        background: "var(--color-primary-soft)",
+                        borderRadius: "8px",
+                        marginBottom: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        border: "1px solid rgba(94, 106, 210, 0.1)",
+                    }}
+                >
+                    <Sparkles size={10} strokeWidth={2} />
                     Analyzing secure data siloes...
                 </div>
             )}
+
+            <style>{`
+                @keyframes spin-sync {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
 
             {state.mcpSources.map((src, index) => {
                 const isPending = src.status === "pending";

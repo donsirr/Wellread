@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useConsultation } from "./ConsultationContext";
 import { useStore } from "./StoreContext";
+import { usePhysicianReport, ProcessingOverlay, ReportModal } from "./PhysicianReport";
 
 /* ── Medical Cross Icon ── */
 
@@ -72,6 +73,7 @@ export default function ConsultationBrief() {
 
     const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
     const toggleItem = (i: number) => setCheckedItems((p) => ({ ...p, [i]: !p[i] }));
+    const report = usePhysicianReport();
 
     return (
         <section
@@ -325,6 +327,7 @@ export default function ConsultationBrief() {
                 {/* Generate Report Button */}
                 <button
                     id="generate-report-btn"
+                    onClick={report.generate}
                     className="btn-gloss w-full flex items-center justify-center gap-2"
                     style={{
                         background: "linear-gradient(135deg, #5E6AD2 0%, #818CF8 100%)",
@@ -334,6 +337,17 @@ export default function ConsultationBrief() {
                         fontSize: "13px",
                         fontWeight: 600,
                         letterSpacing: "-0.01em",
+                        cursor: "pointer",
+                        border: "none",
+                        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                        e.currentTarget.style.boxShadow = "0 8px 20px rgba(94, 106, 210, 0.35)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "none";
+                        e.currentTarget.style.boxShadow = "none";
                     }}
                 >
                     <FileOutput size={16} strokeWidth={1.5} />
@@ -344,6 +358,14 @@ export default function ConsultationBrief() {
                     Export as PDF · HIPAA-compliant formatting
                 </p>
             </div>
+
+            {/* Report Processing + Modal */}
+            {report.phase === "processing" && (
+                <ProcessingOverlay progress={report.progress} label={report.label} />
+            )}
+            {report.phase === "ready" && (
+                <ReportModal onClose={report.close} />
+            )}
         </section >
     );
 }
