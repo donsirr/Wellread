@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useRef, ReactNode } from "react";
 import initialState from "../state.json";
 
 export type PatientProfile = typeof initialState.patientProfile;
@@ -21,6 +21,7 @@ export interface StoreState {
     healthGaps: string[];
     isCorrelated: boolean;
     showBrief: boolean;
+    currentStep: number;
 }
 
 interface StoreContextValue {
@@ -30,6 +31,9 @@ interface StoreContextValue {
     updateState: (updater: (prev: StoreState) => StoreState) => void;
     updateMetric: (id: string, newValue: string) => void;
     triggerCorrelation: (fromId: string, toId: string) => void;
+    startAutoDemo: () => void;
+    jumpToStep: (step: number) => void;
+    resetDemo: () => void;
 }
 
 const StoreContext = createContext<StoreContextValue | undefined>(undefined);
@@ -40,7 +44,89 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         activeCorrelationId: null,
         isCorrelated: false,
         showBrief: false, // Hidden by default for the demo flow
+        currentStep: 0,
     });
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const stopAutoDemo = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+    };
+
+    const _applyStep = (step: number) => {
+        setState(prev => {
+            let nextState = { ...prev, currentStep: step };
+
+            // Step 0: Reset
+            if (step >= 0) {
+                nextState.mcpSources = nextState.mcpSources.map(s => ({ ...s, status: s.type === "Appointment" ? "analyzed" : "pending" }));
+                nextState.clinicalMetrics = nextState.clinicalMetrics.map(m =>
+                    m.id === "metric-hba1c" ? { ...m, value: "?" } : m
+                );
+                nextState.activeCorrelationId = null;
+                nextState.isCorrelated = false;
+                nextState.showBrief = false;
+            }
+
+            // Step 1: Fetch Gmail
+            if (step >= 1) {
+                nextState.mcpSources = nextState.mcpSources.map(s =>
+                    s.id === "src-gmail" ? { ...s, status: "analyzed" } : s
+                );
+            }
+
+            // Step 2: Parse PDF
+            if (step >= 2) {
+                nextState.mcpSources = nextState.mcpSources.map(s =>
+                    s.id === "src-lab-pdf" ? { ...s, status: "analyzed" } : s
+                );
+                nextState.clinicalMetrics = nextState.clinicalMetrics.map(m =>
+                    m.id === "metric-hba1c" ? { ...m, value: initialState.clinicalMetrics.find(x => x.id === "metric-hba1c")?.value || "8.6" } : m
+                );
+            }
+
+            // Step 3: Analyze & Correlate
+            if (step >= 3) {
+                const corr = nextState.correlations.find(c => c.sourceID === "src-gmail" && c.metricID === "metric-hba1c");
+                nextState.isCorrelated = true;
+                nextState.activeCorrelationId = corr ? corr.id : `src-gmail-metric-hba1c`;
+            }
+
+            // Step 4: Final Brief
+            if (step >= 4) {
+                nextState.showBrief = true;
+            }
+
+            return nextState;
+        });
+    };
+
+    const jumpToStep = (step: number) => {
+        stopAutoDemo(); // Safety Check: Hand control to manual operator
+        _applyStep(step);
+    };
+
+    const resetDemo = () => {
+        stopAutoDemo();
+        _applyStep(0);
+    };
+
+    const startAutoDemo = () => {
+        stopAutoDemo();
+        _applyStep(0);
+
+        let step = 1;
+        const advance = () => {
+            _applyStep(step);
+            if (step < 4) {
+                step++;
+                timeoutRef.current = setTimeout(advance, 2500);
+            }
+        };
+        timeoutRef.current = setTimeout(advance, 2500);
+    };
 
     const setActiveCorrelation = (id: string | null) => {
         setState((prev) => ({ ...prev, activeCorrelationId: id }));
@@ -83,7 +169,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <StoreContext.Provider value={{ state, setActiveCorrelation, isCorrelationActive, updateState, updateMetric, triggerCorrelation }}>
+        <StoreContext.Provider value={{
+            state, setActiveCorrelation, isCorrelationActive, updateState, updateMetric, triggerCorrelation,
+            startAutoDemo, jumpToStep, resetDemo
+        }}>
             {children}
         </StoreContext.Provider>
     );

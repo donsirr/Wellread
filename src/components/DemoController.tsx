@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useStore } from "./StoreContext";
-import initialState from "../state.json";
 
 export default function DemoController() {
     const [isVisible, setIsVisible] = useState(
         process.env.NODE_ENV === "development"
     );
-    const { updateState, triggerCorrelation, updateMetric } = useStore();
+    const { state, jumpToStep, resetDemo } = useStore();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,47 +21,6 @@ export default function DemoController() {
     }, []);
 
     if (!isVisible) return null;
-
-    const resetDemo = () => {
-        updateState((prev) => ({
-            ...prev,
-            mcpSources: prev.mcpSources.map(s => ({ ...s, status: s.type === "Appointment" ? "analyzed" : "pending" })),
-            clinicalMetrics: prev.clinicalMetrics.map(m =>
-                m.id === "metric-hba1c" ? { ...m, value: "?" } : m
-            ),
-            activeCorrelationId: null,
-            isCorrelated: false,
-            showBrief: false,
-        }));
-    };
-
-    const step1 = () => {
-        updateState((prev) => ({
-            ...prev,
-            mcpSources: prev.mcpSources.map(s =>
-                s.id === "src-gmail" ? { ...s, status: "analyzed" } : s
-            ),
-        }));
-    };
-
-    const step2 = () => {
-        updateState((prev) => ({
-            ...prev,
-            mcpSources: prev.mcpSources.map(s =>
-                s.id === "src-lab-pdf" ? { ...s, status: "analyzed" } : s
-            ),
-        }));
-        // Populate Blood Sugar metric with its actual initial value
-        updateMetric("metric-hba1c", initialState.clinicalMetrics.find(m => m.id === "metric-hba1c")?.value || "8.6");
-    };
-
-    const step3 = () => {
-        triggerCorrelation("src-gmail", "metric-hba1c");
-    };
-
-    const step4 = () => {
-        updateState((prev) => ({ ...prev, showBrief: true }));
-    };
 
     return (
         <div
@@ -86,7 +44,7 @@ export default function DemoController() {
         >
             <div className="flex items-center justify-between mb-2">
                 <span style={{ fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "#8A8F98" }}>
-                    Demo Controller
+                    Demo Controller (Step {state.currentStep})
                 </span>
                 <button
                     onClick={() => setIsVisible(false)}
@@ -97,25 +55,25 @@ export default function DemoController() {
                 </button>
             </div>
 
-            <button onClick={resetDemo} style={btnStyle}>Reset Demo</button>
+            <button onClick={() => resetDemo()} style={btnStyle(state.currentStep === 0)}>Reset Demo</button>
             <div style={{ height: "1px", background: "rgba(255,255,255,0.1)", margin: "4px 0" }} />
-            <button onClick={step1} style={btnStyle}>Step 1: Fetch Gmail</button>
-            <button onClick={step2} style={btnStyle}>Step 2: Parse PDF</button>
-            <button onClick={step3} style={btnStyle}>Step 3: Analyze & Correlate</button>
-            <button onClick={step4} style={btnStyle}>Step 4: Final Brief</button>
+            <button onClick={() => jumpToStep(1)} style={btnStyle(state.currentStep === 1)}>Step 1: Fetch Gmail</button>
+            <button onClick={() => jumpToStep(2)} style={btnStyle(state.currentStep === 2)}>Step 2: Parse PDF</button>
+            <button onClick={() => jumpToStep(3)} style={btnStyle(state.currentStep === 3)}>Step 3: Analyze & Correlate</button>
+            <button onClick={() => jumpToStep(4)} style={btnStyle(state.currentStep === 4)}>Step 4: Final Brief</button>
         </div>
     );
 }
 
-const btnStyle = {
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
+const btnStyle = (isActive: boolean) => ({
+    background: isActive ? "rgba(94, 106, 210, 0.2)" : "rgba(255, 255, 255, 0.05)",
+    border: isActive ? "1px solid rgba(94, 106, 210, 0.5)" : "1px solid rgba(255, 255, 255, 0.1)",
     borderRadius: "8px",
     padding: "8px 12px",
-    color: "#E2E8F0",
+    color: isActive ? "#818CF8" : "#E2E8F0",
     fontSize: "12px",
     fontWeight: 500,
     cursor: "pointer",
     textAlign: "left" as const,
     transition: "all 0.2s ease",
-};
+});

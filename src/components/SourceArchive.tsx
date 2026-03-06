@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useInspector, type SourceType } from "./InspectorContext";
 import { useStore } from "./StoreContext";
-import { useMcpOrchestrator } from "../mcpOrchestrator";
 
 /* ── Processing Bar ── */
 
@@ -98,15 +97,18 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function SourceArchive() {
     const { openInspector } = useInspector();
-    const { state } = useStore();
-    const { runSimulation, loadingProgress, isRunning, logs } = useMcpOrchestrator();
+    const { state, startAutoDemo } = useStore();
+
+    // Simulate some logic from the currentStep
+    const isRunning = state.currentStep > 0 && state.currentStep < 4;
+    const isFinished = state.currentStep >= 4;
 
     return (
         <div id="source-archive" className="flex flex-col gap-2">
             {/* Run Button (for simulation demo) */}
             <button
                 onClick={() => {
-                    if (!isRunning) runSimulation();
+                    if (state.currentStep === 0 || isFinished) startAutoDemo();
                 }}
                 disabled={isRunning}
                 style={{
@@ -121,12 +123,12 @@ export default function SourceArchive() {
                     border: "none"
                 }}
             >
-                {isRunning ? "Intelligence Syncing..." : "Simulate MCP Sync"}
+                {isRunning ? "Intelligence Syncing..." : isFinished ? "Restart Sync" : "Simulate MCP Sync"}
             </button>
 
             {isRunning && (
                 <div style={{ padding: "8px", fontSize: "11px", color: "var(--color-primary)", background: "var(--color-primary-soft)", borderRadius: "6px", marginBottom: "8px" }}>
-                    {logs[logs.length - 1]}
+                    Analyzing secure data siloes...
                 </div>
             )}
 
@@ -211,7 +213,7 @@ export default function SourceArchive() {
                             </div>
 
                             {isPending && isRunning && (
-                                <ProcessingBar progress={loadingProgress} color={styleConfig.iconColor} />
+                                <ProcessingBar progress={100} color={styleConfig.iconColor} />
                             )}
                         </div>
                     </div>
