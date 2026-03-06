@@ -140,7 +140,7 @@ export default function SourceArchive() {
                 const colorMap: Record<string, { iconColor: string, iconBg: string, inspectorType: SourceType }> = {
                     "Mail": { iconColor: "#5E6AD2", iconBg: "rgba(94, 106, 210, 0.08)", inspectorType: "gmail" },
                     "FileText": { iconColor: "#EB5757", iconBg: "rgba(235, 87, 87, 0.06)", inspectorType: "pdf" },
-                    "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "calendar" }
+                    "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "clinical_note" }
                 };
 
                 const styleConfig = colorMap[src.iconType] || colorMap["FileText"];
@@ -153,7 +153,13 @@ export default function SourceArchive() {
                         style={{ padding: "14px 16px" }}
                         onClick={() => {
                             if (isPending) return;
-                            openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true })
+
+                            let evidenceSnippet: string | undefined;
+                            if (src.id === "src-gmail") evidenceSnippet = "numbness in your toes";
+                            if (src.id === "src-lab-pdf") evidenceSnippet = "HbA1c";
+                            if (src.id === "src-calendar") evidenceSnippet = "persistent neuropathy";
+
+                            openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true, evidenceSnippet })
                         }}
                     >
                         <div className="flex items-start gap-3">

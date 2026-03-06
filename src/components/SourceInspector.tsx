@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, ShieldCheck, FileText, Mail, Zap, Lightbulb, ArrowRight, Sparkles } from "lucide-react";
+import { X, ShieldCheck, FileText, Mail, Zap, Lightbulb, ArrowRight, Sparkles, CalendarDays } from "lucide-react";
 import { useInspector } from "./InspectorContext";
 import { useStore } from "./StoreContext";
 
@@ -383,10 +383,50 @@ function GmailPreview({ snippet }: { snippet?: string }) {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Mock Clinical Note Preview
+   ───────────────────────────────────────────────────────────── */
+
+function ClinicalNotePreview({ snippet }: { snippet?: string }) {
+    return (
+        <div
+            style={{
+                background: "white",
+                borderRadius: "16px",
+                border: "1px solid var(--color-border)",
+                overflow: "hidden",
+            }}
+        >
+            {/* Note header */}
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)" }}>
+                <div className="flex items-center gap-2 mb-1">
+                    <CalendarDays size={14} strokeWidth={1.5} style={{ color: "#F2994A" }} />
+                    <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-muted)" }}>
+                        Clinical Summary
+                    </span>
+                </div>
+                <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--color-foreground)" }}>
+                    Note from Dr. Aris - Endocrinology
+                </p>
+                <p style={{ fontSize: "12px", color: "var(--color-muted)", marginTop: "2px" }}>
+                    Encounter: Mar 14, 2026 Focus: Glycemic Volatility
+                </p>
+            </div>
+
+            {/* Note body */}
+            <div style={{ padding: "24px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
+                <p>
+                    <EvidenceHighlight text="Patient reports persistent neuropathy in lower extremities. Recommended HbA1c screening to check for glycemic volatility." snippet={snippet} />
+                </p>
+            </div>
+        </div>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Insight Sidebar (inside the modal)
    ───────────────────────────────────────────────────────────── */
 
-function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" }) {
+function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" | "clinical_note" }) {
     const insights = type === "pdf"
         ? [
             {
@@ -405,7 +445,23 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" }) {
                 severity: "high" as const,
             },
         ]
-        : [
+        : type === "clinical_note" || type === "calendar" ? [
+            {
+                title: "Neuropathy Confirmation",
+                description: "Endocrinologist note confirms persistent neuropathy symptoms.",
+                severity: "high" as const,
+            },
+            {
+                title: "Glycemic Volatility",
+                description: "Specialist is directly linking these symptoms to potential A1c instability.",
+                severity: "medium" as const,
+            },
+            {
+                title: "Recommended Action",
+                description: "Immediate HbA1c screening is required to measure control baseline.",
+                severity: "high" as const,
+            },
+        ] : [
             {
                 title: "Neuropathy Indicator",
                 description: "Bilateral tingling in toes is a classic presentation of diabetic peripheral neuropathy.",
@@ -502,7 +558,9 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" }) {
                 <p style={{ fontSize: "11px", lineHeight: 1.55, color: "var(--color-muted-foreground)" }}>
                     {type === "pdf"
                         ? "This lab result was cross-referenced with a Gmail thread where the patient reported numbness in toes — a known complication of sustained elevated HbA1c."
-                        : "This email was cross-referenced with recent lab results showing HbA1c spiking to 8.6%, confirming the clinical significance of the neuropathic symptoms."
+                        : type === "clinical_note" || type === "calendar"
+                            ? "This clinic note aligns perfectly with the patient's self-reported timeline of symptoms and validates the need for new labs."
+                            : "This email was cross-referenced with recent lab results showing HbA1c spiking to 8.6%, confirming the clinical significance of the neuropathic symptoms."
                     }
                 </p>
             </div>
@@ -573,6 +631,8 @@ export default function SourceInspector() {
                         >
                             {type === "gmail" ? (
                                 <Mail size={16} strokeWidth={1.5} style={{ color: "var(--color-primary)" }} />
+                            ) : type === "clinical_note" || type === "calendar" ? (
+                                <CalendarDays size={16} strokeWidth={1.5} style={{ color: "#F2994A" }} />
                             ) : (
                                 <FileText size={16} strokeWidth={1.5} style={{ color: "var(--color-danger)" }} />
                             )}
@@ -582,7 +642,7 @@ export default function SourceInspector() {
                                 {source?.fileName ?? "Document"}
                             </p>
                             <p style={{ fontSize: "11px", color: "var(--color-muted)" }}>
-                                {type === "gmail" ? "Gmail Thread · 3 messages" : "Lab Report PDF · 2.4 MB"}
+                                {type === "gmail" ? "Gmail Thread · 3 messages" : type === "clinical_note" || type === "calendar" ? "Clinical Summary Note" : "Lab Report PDF · 2.4 MB"}
                             </p>
                         </div>
                     </div>
@@ -636,7 +696,7 @@ export default function SourceInspector() {
                         className="flex-1 overflow-y-auto"
                         style={{ padding: "24px" }}
                     >
-                        {type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />}
+                        {type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : type === "clinical_note" || type === "calendar" ? <ClinicalNotePreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />}
 
                         {/* Bottom action */}
                         <div className="flex items-center gap-2 mt-4">

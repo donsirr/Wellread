@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 
-export type SourceType = "pdf" | "gmail" | "calendar";
+export type SourceType = "pdf" | "gmail" | "calendar" | "clinical_note";
 
 export interface InspectorSource {
     id: string;

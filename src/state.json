@@ -29,10 +29,11 @@
         },
         {
             "id": "src-calendar",
-            "type": "Appointment",
+            "type": "clinical_note",
             "status": "analyzed",
             "contentSnippet": "Endocrinology Follow-up - Dr. Chen",
             "name": "Endocrinology Follow-up",
+            "documentBody": "Patient reports persistent neuropathy in lower extremities. Recommended HbA1c screening to check for glycemic volatility.",
             "date": "Mar 14, 2026",
             "iconType": "Calendar"
         }

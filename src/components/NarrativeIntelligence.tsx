@@ -148,7 +148,7 @@ export default function NarrativeIntelligence() {
                             <span
                                 role="button"
                                 tabIndex={0}
-                                onClick={() => openInspector({ id: "src-calendar", fileName: state.mcpSources[1]?.name || "Lab Report", type: "pdf", verified: true, evidenceSnippet: "HbA1c" })}
+                                onClick={() => openInspector({ id: "src-lab-pdf", fileName: state.mcpSources[1]?.name || "Lab Report", type: "pdf", verified: true, evidenceSnippet: "HbA1c" })}
                                 style={{ fontWeight: 600, color: "#EB5757", cursor: "pointer", borderBottom: "1px dashed #EB5757" }}
                             >{state.narrative.highlight2}</span>{" "}
                             <span className="text-muted" style={{ fontSize: "12px" }}>{state.narrative.sourceText3}</span>
