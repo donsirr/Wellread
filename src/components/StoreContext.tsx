@@ -19,6 +19,7 @@ export interface StoreState {
     consultation: Consultation;
     activeCorrelationId: string | null;
     healthGaps: string[];
+    isCorrelated: boolean;
 }
 
 interface StoreContextValue {
@@ -26,6 +27,8 @@ interface StoreContextValue {
     setActiveCorrelation: (id: string | null) => void;
     isCorrelationActive: (sourceId?: string, metricId?: string) => boolean;
     updateState: (updater: (prev: StoreState) => StoreState) => void;
+    updateMetric: (id: string, newValue: string) => void;
+    triggerCorrelation: (fromId: string, toId: string) => void;
 }
 
 const StoreContext = createContext<StoreContextValue | undefined>(undefined);
@@ -34,6 +37,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<StoreState>({
         ...initialState,
         activeCorrelationId: null,
+        isCorrelated: false,
     });
 
     const setActiveCorrelation = (id: string | null) => {
@@ -55,12 +59,36 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setState(updater);
     };
 
+    const updateMetric = (id: string, newValue: string) => {
+        setState(prev => ({
+            ...prev,
+            clinicalMetrics: prev.clinicalMetrics.map(metric =>
+                metric.id === id ? { ...metric, value: newValue } : metric
+            )
+        }));
+    };
+
+    const triggerCorrelation = (fromId: string, toId: string) => {
+        setState(prev => {
+            // Find existing correlation or just set state
+            const corr = prev.correlations.find(c => c.sourceID === fromId && c.metricID === toId);
+            return {
+                ...prev,
+                isCorrelated: true,
+                activeCorrelationId: corr ? corr.id : `${fromId}-${toId}`
+            };
+        });
+    };
+
     return (
-        <StoreContext.Provider value={{ state, setActiveCorrelation, isCorrelationActive, updateState }}>
+        <StoreContext.Provider value={{ state, setActiveCorrelation, isCorrelationActive, updateState, updateMetric, triggerCorrelation }}>
             {children}
         </StoreContext.Provider>
     );
 }
+
+// Alias for WellReadProvider as requested
+export const WellReadProvider = StoreProvider;
 
 export function useStore() {
     const context = useContext(StoreContext);

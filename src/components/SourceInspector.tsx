@@ -6,21 +6,60 @@ import { useInspector } from "./InspectorContext";
 import { useStore } from "./StoreContext";
 
 /* ─────────────────────────────────────────────────────────────
+   Medical Term Tooltip
+   ───────────────────────────────────────────────────────────── */
+function CustomTooltip({ children, content }: { children: React.ReactNode, content: string }) {
+    if (!content) return <>{children}</>;
+    return (
+        <span className="group" style={{ position: "relative", cursor: "help", borderBottom: "1px dashed #8A8F98" }}>
+            {children}
+            <span
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{
+                    position: "absolute",
+                    bottom: "100%",
+                    left: "0",
+                    marginBottom: "8px",
+                    background: "#1B1B1B",
+                    color: "white",
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    lineHeight: 1.4,
+                    whiteSpace: "normal",
+                    width: "max-content",
+                    maxWidth: "220px",
+                    pointerEvents: "none",
+                    zIndex: 100,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    fontWeight: 400
+                }}
+            >
+                {content}
+                <svg width="10" height="5" viewBox="0 0 10 5" style={{ position: "absolute", top: "100%", left: "12px" }}>
+                    <polygon points="0,0 10,0 5,5" fill="#1B1B1B" />
+                </svg>
+            </span>
+        </span>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Mock PDF Document Preview
    ───────────────────────────────────────────────────────────── */
 
 function PDFPreview() {
     const rows = [
-        { test: "Glucose, Fasting", value: "126", range: "70–100 mg/dL", flag: "H" },
-        { test: "BUN", value: "18", range: "7–20 mg/dL", flag: "" },
-        { test: "Creatinine", value: "1.0", range: "0.7–1.3 mg/dL", flag: "" },
-        { test: "eGFR", value: "78", range: ">60 mL/min", flag: "" },
-        { test: "HbA1c", value: "8.2%", range: "<7.0%", flag: "H", highlight: true },
-        { test: "Sodium", value: "140", range: "136–145 mEq/L", flag: "" },
-        { test: "Potassium", value: "4.2", range: "3.5–5.0 mEq/L", flag: "" },
-        { test: "Calcium", value: "9.5", range: "8.5–10.5 mg/dL", flag: "" },
-        { test: "Total Protein", value: "7.0", range: "6.0–8.3 g/dL", flag: "" },
-        { test: "Albumin", value: "4.1", range: "3.5–5.5 g/dL", flag: "" },
+        { test: "Glucose, Fasting", value: "142", range: "70–100 mg/dL", flag: "H", desc: "Blood sugar level after fasting for at least 8 hours." },
+        { test: "BUN", value: "22", range: "7–20 mg/dL", flag: "H", desc: "Blood Urea Nitrogen, a measure of kidney function." },
+        { test: "Creatinine", value: "1.2", range: "0.7–1.3 mg/dL", flag: "", desc: "A waste product from muscle metabolism, used to check kidney function." },
+        { test: "eGFR", value: "65", range: ">60 mL/min", flag: "", desc: "Estimated Glomerular Filtration Rate. Measures how well your kidneys are filtering blood." },
+        { test: "HbA1c", value: "8.6%", range: "<7.0%", flag: "H", highlight: true, desc: "A 3-month average of blood sugar levels. Higher levels mean poor glucose control." },
+        { test: "Sodium", value: "140", range: "136–145 mEq/L", flag: "", desc: "An electrolyte that helps maintain fluid balance and nerve function." },
+        { test: "Potassium", value: "4.5", range: "3.5–5.0 mEq/L", flag: "", desc: "An electrolyte essential for heart and muscle function." },
+        { test: "Calcium", value: "9.2", range: "8.5–10.5 mg/dL", flag: "", desc: "Important for bone health, muscle contractions, and nerve signaling." },
+        { test: "LDL Cholesterol", value: "155", range: "<100 mg/dL", flag: "H", desc: "Low-Density Lipoprotein, often called 'bad' cholesterol." },
+        { test: "Albumin", value: "4.2", range: "3.5–5.5 g/dL", flag: "", desc: "A protein made by the liver that keeps fluid from leaking out of blood vessels." },
     ];
 
     return (
@@ -97,9 +136,9 @@ function PDFPreview() {
                             }}
                         >
                             {row.highlight ? (
-                                <span className="highlight-glow">{row.test}</span>
+                                <CustomTooltip content={row.desc}><span className="highlight-glow">{row.test}</span></CustomTooltip>
                             ) : (
-                                row.test
+                                <CustomTooltip content={row.desc}>{row.test}</CustomTooltip>
                             )}
                         </span>
                         <span
@@ -188,21 +227,21 @@ function GmailPreview() {
                         </div>
                         <div>
                             <span style={{ fontSize: "13px", fontWeight: 500 }}>{state.patientProfile.name}</span>
-                            <span style={{ fontSize: "11px", color: "var(--color-muted)", marginLeft: "8px" }}>Mar 5, 2026 9:14 AM</span>
+                            <span style={{ fontSize: "11px", color: "var(--color-muted)", marginLeft: "8px" }}>Mar 6, 2026 8:45 AM</span>
                         </div>
                     </div>
                     <div style={{ paddingLeft: "40px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
                         <p>Hi Dr. Chen,</p>
                         <p style={{ marginTop: "8px" }}>
-                            I wanted to reach out about some concerns. Over the past two weeks, <span className="highlight-glow" style={{ fontWeight: 500 }}>I have been experiencing persistent blurred vision</span>, particularly in the mornings and after meals. It usually lasts about 30–45 minutes before clearing up.
+                            I wanted to reach out about some new symptoms. Recently, <span className="highlight-glow" style={{ fontWeight: 500 }}>I've noticed recent numbness and tingling in my toes</span>, along with blurry vision that comes and goes throughout the day.
                         </p>
                         <p style={{ marginTop: "8px" }}>
-                            I&apos;ve also noticed increased thirst and more frequent urination, especially at night. I&apos;m not sure if these are related to my current medications.
+                            It's been consistently bothering me, particularly at night, and I'm a bit worried since my last tests weren't great.
                         </p>
                         <p style={{ marginTop: "8px" }}>
-                            Should I schedule an earlier appointment, or is this something we can address at my next visit?
+                            Should I come in sooner than my scheduled appointment next week?
                         </p>
-                        <p style={{ marginTop: "12px" }}>Best regards,<br />{state.patientProfile.name.split(" ")[0]}</p>
+                        <p style={{ marginTop: "12px" }}>Thanks,<br />{state.patientProfile.name.split(" ")[0]}</p>
                     </div>
                 </div>
 
@@ -230,16 +269,16 @@ function GmailPreview() {
                         </div>
                         <div>
                             <span style={{ fontSize: "13px", fontWeight: 500 }}>Dr. M. Chen</span>
-                            <span style={{ fontSize: "11px", color: "var(--color-muted)", marginLeft: "8px" }}>Mar 5, 2026 11:32 AM</span>
+                            <span style={{ fontSize: "11px", color: "var(--color-muted)", marginLeft: "8px" }}>Mar 6, 2026 10:12 AM</span>
                         </div>
                     </div>
                     <div style={{ paddingLeft: "40px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
                         <p>{state.patientProfile.name.split(" ")[0]},</p>
                         <p style={{ marginTop: "8px" }}>
-                            Thank you for letting me know. The blurred vision and increased thirst are important symptoms that we should investigate promptly. I&apos;m going to order a comprehensive metabolic panel and HbA1c test.
+                            Thank you for letting me know. The tingling in your toes and blurry vision are important symptoms that we should investigate promptly, especially alongside your recent high HbA1c spike.
                         </p>
                         <p style={{ marginTop: "8px" }}>
-                            Please try to schedule your lab work within the next 48 hours if possible.
+                            I am moving your appointment up, and my team will call you to confirm. We will perform a comprehensive foot examination and adjust your care plan.
                         </p>
                         <p style={{ marginTop: "12px" }}>Best,<br />Dr. Chen</p>
                     </div>
@@ -257,35 +296,35 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" }) {
     const insights = type === "pdf"
         ? [
             {
-                title: "HbA1c Flagged",
-                description: "Value 8.2% exceeds ADA target of <7.0%. This represents a 0.6% increase from the previous reading of 7.6% taken 3 months ago.",
+                title: "HbA1c Critical Spike",
+                description: "Value 8.6% represents a significant worsening of glycemic control, an abrupt increase flagging potential onset of microvascular complications.",
                 severity: "high" as const,
             },
             {
                 title: "Fasting Glucose Elevated",
-                description: "Fasting glucose of 126 mg/dL confirms hyperglycemia and correlates with the upward HbA1c trend.",
+                description: "Fasting glucose of 142 mg/dL confirms prolonged hyperglycemia state.",
                 severity: "medium" as const,
             },
             {
-                title: "Renal Function Stable",
-                description: "eGFR of 78 remains above threshold for SGLT2 inhibitor candidacy, which may be considered for glycemic management.",
-                severity: "low" as const,
+                title: "LDL Out of Range",
+                description: "LDL at 155 mg/dL indicates elevated cardiovascular risk, particularly in presence of uncontrolled diabetes.",
+                severity: "high" as const,
             },
         ]
         : [
             {
-                title: "Symptom Detected",
-                description: "\"Blurred vision\" is a known clinical sign of hyperglycemia. WellRead cross-referenced this against the patient's lab results.",
+                title: "Neuropathy Indicator",
+                description: "Bilateral tingling in toes is a classic presentation of diabetic peripheral neuropathy.",
                 severity: "high" as const,
             },
             {
-                title: "Temporal Correlation",
-                description: "Symptoms reported as occurring \"after meals\" strongly suggests post-prandial glucose spikes, consistent with 120/160 mg/dL readings.",
-                severity: "medium" as const,
+                title: "Retinopathy Risk",
+                description: "Reported blurry vision alongside HbA1c spike warrants immediate assessment for diabetic retinopathy.",
+                severity: "high" as const,
             },
             {
-                title: "Additional Symptoms",
-                description: "Polydipsia (increased thirst) and polyuria (frequent urination) are supporting indicators of suboptimal glucose control.",
+                title: "Immediate Action Required",
+                description: "The rapid onset of these tandem symptoms flags this patient for immediate intervention prior to scheduled visit.",
                 severity: "medium" as const,
             },
         ];
@@ -368,8 +407,8 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" }) {
                 </div>
                 <p style={{ fontSize: "11px", lineHeight: 1.55, color: "var(--color-muted-foreground)" }}>
                     {type === "pdf"
-                        ? "This lab result was cross-referenced with a Gmail thread where the patient reported blurred vision — a known symptom of elevated HbA1c."
-                        : "This email was cross-referenced with lab results showing HbA1c at 8.2%, confirming the clinical significance of the reported symptoms."
+                        ? "This lab result was cross-referenced with a Gmail thread where the patient reported numbness in toes — a known complication of sustained elevated HbA1c."
+                        : "This email was cross-referenced with recent lab results showing HbA1c spiking to 8.6%, confirming the clinical significance of the neuropathic symptoms."
                     }
                 </p>
             </div>

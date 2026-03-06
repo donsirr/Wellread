@@ -1,98 +1,119 @@
 {
     "patientProfile": {
-        "name": "Elena Rossi",
-        "age": 32,
+        "name": "Juan Dela Cruz",
+        "age": 58,
         "conditions": [
-            "Asthma"
+            "Type 2 Diabetes",
+            "Hypertension"
         ],
-        "dob": "Oct 12, 1993"
+        "dob": "Mar 7, 1968"
     },
     "mcpSources": [
         {
             "id": "src-gmail",
             "type": "Gmail Thread",
             "status": "analyzed",
-            "contentSnippet": "Experiencing heart racing after coffee this morning...",
-            "name": "Heart Rate Concerns",
-            "date": "Mar 5, 2026",
+            "contentSnippet": "I've noticed recent numbness and tingling in my toes, along with blurry vision...",
+            "name": "Symptom Update",
+            "date": "Mar 6, 2026",
             "iconType": "Mail"
+        },
+        {
+            "id": "src-lab-pdf",
+            "type": "PDF Document",
+            "status": "analyzed",
+            "contentSnippet": "HbA1c: 8.6% (Flag: H)",
+            "name": "Metabolic Panel",
+            "date": "Mar 4, 2026",
+            "iconType": "FileText"
         },
         {
             "id": "src-calendar",
             "type": "Appointment",
             "status": "analyzed",
-            "contentSnippet": "Started Albuterol (Asthma) - Dr. Smith",
-            "name": "Asthma Action Plan Update",
-            "date": "Mar 1, 2026",
+            "contentSnippet": "Endocrinology Follow-up - Dr. Chen",
+            "name": "Endocrinology Follow-up",
+            "date": "Mar 14, 2026",
             "iconType": "Calendar"
-        },
-        {
-            "id": "src-device",
-            "type": "PDF Document",
-            "status": "analyzed",
-            "contentSnippet": "BPM increased 65 -> 82",
-            "name": "Apple Watch Heart Rate Data",
-            "date": "Mar 5, 2026",
-            "iconType": "FileText"
         }
     ],
     "clinicalMetrics": [
         {
-            "id": "metric-bpm",
-            "label": "Heart Rate",
-            "value": "82",
-            "unit": "bpm",
+            "id": "metric-hba1c",
+            "label": "HbA1c",
+            "value": "8.6",
+            "unit": "%",
             "sparkData": [
-                65,
-                66,
-                65,
-                68,
-                82,
-                81,
-                82
+                7.1,
+                7.3,
+                7.2,
+                7.5,
+                7.9,
+                8.2,
+                8.6
             ],
-            "iconType": "Heart"
+            "iconType": "Droplets"
+        },
+        {
+            "id": "metric-bp",
+            "label": "Blood Pressure",
+            "value": "135/85",
+            "unit": "mmHg",
+            "sparkData": [
+                120,
+                122,
+                125,
+                128,
+                130,
+                132,
+                135
+            ],
+            "iconType": "Gauge"
         }
     ],
     "correlations": [
         {
-            "id": "corr-elena",
-            "sourceID": "src-calendar",
-            "metricID": "metric-bpm",
-            "description": "Patient reports tachycardia. Though she attributes it to coffee, recent prescription of Albuterol (Mar 1) is a known beta-agonist that frequently causes elevated resting BPM (65 -> 82).",
+            "id": "corr-juan",
+            "sourceID": "src-gmail",
+            "metricID": "metric-hba1c",
+            "description": "Patient reports tingling in toes and blurry vision. This strongly correlates with recent HbA1c results (8.6%), indicating poorly controlled diabetes and potential onset of diabetic peripheral neuropathy.",
             "active": true
         }
     ],
-    "activeCorrelationId": "corr-elena",
+    "activeCorrelationId": "corr-juan",
     "healthGaps": [
-        "Potential Gap: Tachycardia temporally linked to new Albuterol prescription, independent of caffeine. Ensure asthma inhaler dosage/frequency is evaluated."
+        "Potential Gap: Peripheral neuropathy symptoms reported, but no recent comprehensive foot exam or monofilament test on record."
     ],
     "narrative": {
         "title": "Clinical Correlation Detected",
-        "confidence": 95,
-        "sourceText1": "Elena, your ",
-        "highlight1": "heart racing",
-        "sourceText2": " (reported in Gmail) is likely caused by starting ",
-        "highlight2": "Albuterol on Mar 1",
-        "sourceText3": " (detected in Calendar), instead of the coffee, causing your BPM increase (65 -> 82).",
-        "insightSources": "3 sources · 18 data points"
+        "confidence": 92,
+        "sourceText1": "Juan, the ",
+        "highlight1": "numbness in your toes",
+        "sourceText2": " (reported in Gmail) is highly consistent with your recent ",
+        "highlight2": "HbA1c spike to 8.6%",
+        "sourceText3": " (detected in Lab PDF), suggesting potential neuropathy.",
+        "insightSources": "2 sources · 14 data points"
     },
     "consultation": {
-        "trajectory": "Patient initiated Albuterol therapy on Mar 1. Presents with new-onset tachycardia (bpm 65 -> 82). High probability of beta-agonist induced symptoms.",
+        "trajectory": "Patient presents with sub-optimal glycemic control (HbA1c 8.6%) and new onset of microvascular complications (neuropathy, retinopathy). Immediate intervention needed to prevent progression.",
         "observations": [
             {
-                "text": "Resting Heart Rate elevated from baseline 65 to 82 bpm.",
-                "severity": "medium"
+                "text": "HbA1c has spiked from 7.9% to 8.6% over the last 6 months.",
+                "severity": "high"
             },
             {
-                "text": "Symptom onset aligns temporally with new Albuterol prescription, despite patient attributing it to caffeine.",
+                "text": "New symptoms of bilateral lower extremity tingling indicate diabetic peripheral neuropathy.",
                 "severity": "high"
+            },
+            {
+                "text": "Blurred vision suggests potential diabetic retinopathy, warranting an ophthalmology referral.",
+                "severity": "medium"
             }
         ],
         "questions": [
-            "Is the asthma inhaler dosage (Albuterol) too high?",
-            "How frequently is the rescue inhaler being used per day?",
-            "Any palpitations or shortness of breath at rest?"
+            "Are the tingling sensations worse at night?",
+            "Have you noticed any sores or cuts on your feet that are slow to heal?",
+            "When was your last comprehensive eye exam?"
         ]
     }
 }
