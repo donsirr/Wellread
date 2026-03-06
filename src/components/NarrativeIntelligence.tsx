@@ -1,6 +1,7 @@
 "use client";
 
-import { Mail, FileText, Zap, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Mail, FileText, Zap, ArrowRight, Loader2 } from "lucide-react";
 import { useInspector } from "./InspectorContext";
 import { useStore } from "./StoreContext";
 
@@ -94,6 +95,7 @@ function FlowConnectors() {
 export default function NarrativeIntelligence() {
     const { openInspector } = useInspector();
     const { state } = useStore();
+    const [isLoading, setIsLoading] = useState(false);
 
     if (!state.narrative) {
         return null;
@@ -155,6 +157,19 @@ export default function NarrativeIntelligence() {
                         <div className="flex items-center gap-3 mt-3">
                             <button
                                 id="view-full-correlation"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    setTimeout(() => {
+                                        setIsLoading(false);
+                                        openInspector({
+                                            id: "src-lab-pdf",
+                                            fileName: state.mcpSources.find(s => s.id === "src-lab-pdf")?.name || "Lab Report",
+                                            type: "pdf",
+                                            verified: true,
+                                            evidenceSnippet: "HbA1c"
+                                        });
+                                    }, 500);
+                                }}
                                 className="flex items-center gap-1 text-primary"
                                 style={{
                                     fontSize: "12px",
@@ -163,13 +178,24 @@ export default function NarrativeIntelligence() {
                                     padding: "6px 12px",
                                     borderRadius: "6px",
                                     border: "none",
-                                    cursor: "pointer",
+                                    cursor: isLoading ? "default" : "pointer",
                                     transition: "all 0.15s ease",
                                     color: "var(--color-primary)",
+                                    opacity: isLoading ? 0.8 : 1,
                                 }}
+                                disabled={isLoading}
                             >
-                                View Analysis
-                                <ArrowRight size={12} strokeWidth={2} />
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 size={12} strokeWidth={2} style={{ animation: "spin 1s linear infinite" }} />
+                                        Retrieving Data...
+                                    </>
+                                ) : (
+                                    <>
+                                        View Analysis
+                                        <ArrowRight size={12} strokeWidth={2} />
+                                    </>
+                                )}
                             </button>
                             <span className="text-muted" style={{ fontSize: "11px" }}>
                                 {state.narrative.insightSources}
