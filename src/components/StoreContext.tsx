@@ -61,7 +61,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
             // Step 0: Reset
             if (step >= 0) {
-                nextState.mcpSources = nextState.mcpSources.map(s => ({ ...s, status: s.type === "Appointment" ? "analyzed" : "pending" }));
+                nextState.mcpSources = nextState.mcpSources.map(s => ({ ...s, status: s.type === "clinical_note" ? "analyzed" : "pending" }));
                 nextState.clinicalMetrics = nextState.clinicalMetrics.map(m =>
                     m.id === "metric-hba1c" ? { ...m, value: "?" } : m
                 );
@@ -80,18 +80,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             // Step 2: Parse PDF
             if (step >= 2) {
                 nextState.mcpSources = nextState.mcpSources.map(s =>
-                    s.id === "src-lab-pdf" ? { ...s, status: "analyzed" } : s
+                    s.id === "src-lab-pdf" || s.id === "src-calendar" ? { ...s, status: "analyzed" } : s
                 );
                 nextState.clinicalMetrics = nextState.clinicalMetrics.map(m =>
                     m.id === "metric-hba1c" ? { ...m, value: initialState.clinicalMetrics.find(x => x.id === "metric-hba1c")?.value || "8.6" } : m
                 );
             }
 
-            // Step 3: Analyze & Correlate
+            // Step 3: Analyze (no correlation lines)
             if (step >= 3) {
-                const corr = nextState.correlations.find(c => c.sourceID === "src-gmail" && c.metricID === "metric-hba1c");
-                nextState.isCorrelated = true;
-                nextState.activeCorrelationId = corr ? corr.id : `src-gmail-metric-hba1c`;
+                // Insights become visible but no SVG lines
             }
 
             // Step 4: Final Brief

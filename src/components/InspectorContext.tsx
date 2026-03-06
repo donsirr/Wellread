@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from "react";
 
 export type SourceType = "pdf" | "gmail" | "calendar" | "clinical_note";
 
@@ -29,8 +29,14 @@ const InspectorContext = createContext<InspectorContextValue>({
 export function InspectorProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const [source, setSource] = useState<InspectorSource | null>(null);
+    const clearTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const openInspector = useCallback((src: InspectorSource) => {
+        // Cancel any pending source-clear from a previous close
+        if (clearTimerRef.current) {
+            clearTimeout(clearTimerRef.current);
+            clearTimerRef.current = null;
+        }
         setSource(src);
         setIsOpen(true);
     }, []);
@@ -38,7 +44,10 @@ export function InspectorProvider({ children }: { children: ReactNode }) {
     const closeInspector = useCallback(() => {
         setIsOpen(false);
         // Delay clearing source so close animation can finish
-        setTimeout(() => setSource(null), 300);
+        clearTimerRef.current = setTimeout(() => {
+            setSource(null);
+            clearTimerRef.current = null;
+        }, 300);
     }, []);
 
     return (

@@ -110,22 +110,19 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                         </span>
                         <style>{`
                             .highlighter-glow-effect {
-                                background-color: rgba(234, 179, 8, 0.15);
+                                background-color: transparent;
                                 background-image: linear-gradient(
                                     90deg, 
-                                    transparent 0%, 
-                                    transparent 30%, 
-                                    rgba(234, 179, 8, 0.6) 50%, 
-                                    transparent 70%, 
-                                    transparent 100%
+                                    rgba(253, 224, 71, 0.35) 0%, 
+                                    rgba(253, 224, 71, 0.35) 100%
                                 );
-                                background-size: 200% 100%;
-                                background-position: -100% 0;
-                                animation: highlighter-moving-glow 1.5s cubic-bezier(0.4, 0, 0.2, 1) 1 forwards 0.6s;
+                                background-size: 0% 100%;
+                                background-repeat: no-repeat;
+                                animation: highlighter-fill 0.8s ease-out 0.6s forwards;
                             }
-                            @keyframes highlighter-moving-glow {
-                                0% { background-position: 200% 0; }
-                                100% { background-position: -100% 0; }
+                            @keyframes highlighter-fill {
+                                0% { background-size: 0% 100%; }
+                                100% { background-size: 100% 100%; }
                             }
                             @keyframes pop-in {
                                 to { opacity: 1; transform: translate(-50%, 0) scale(1); }
@@ -344,7 +341,7 @@ function GmailPreview({ snippet }: { snippet?: string }) {
                     <div style={{ paddingLeft: "40px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
                         <p>Hi Dr. Chen,</p>
                         <p style={{ marginTop: "8px" }}>
-                            I wanted to reach out about some new symptoms. Recently, <EvidenceHighlight text="I've noticed recent numbness and tingling in my toes" snippet={snippet} />, along with blurry vision that comes and goes throughout the day.
+                            I wanted to reach out about some new symptoms. Recently, I've noticed recent <EvidenceHighlight text="numbness and tingling in my toes" snippet={snippet} />, along with blurry vision that comes and goes throughout the day.
                         </p>
                         <p style={{ marginTop: "8px" }}>
                             It's been consistently bothering me, particularly at night, and I'm a bit worried since my last tests weren't great.
@@ -716,28 +713,70 @@ export default function SourceInspector() {
                         {type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : type === "clinical_note" || type === "calendar" ? <ClinicalNotePreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />}
 
                         {/* Bottom action */}
-                        <div className="flex items-center gap-2 mt-4">
+                        <div className="flex items-center gap-3 mt-4">
                             <button
+                                className="view-original-btn"
+                                onClick={() => {
+                                    const urls: Record<string, string> = {
+                                        gmail: "https://mail.google.com",
+                                        pdf: "https://drive.google.com",
+                                        clinical_note: "https://drive.google.com",
+                                        calendar: "https://calendar.google.com",
+                                    };
+                                    window.open(urls[type] || "https://drive.google.com", "_blank");
+                                }}
                                 style={{
                                     fontSize: "12px",
-                                    fontWeight: 500,
+                                    fontWeight: 600,
                                     color: "var(--color-primary)",
                                     background: "var(--color-primary-soft)",
-                                    padding: "8px 14px",
-                                    borderRadius: "8px",
-                                    border: "none",
+                                    padding: "10px 18px",
+                                    borderRadius: "10px",
+                                    border: "1px solid rgba(94, 106, 210, 0.15)",
                                     cursor: "pointer",
                                     display: "flex",
                                     alignItems: "center",
-                                    gap: "4px",
+                                    gap: "6px",
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(94, 106, 210, 0.25)";
+                                    e.currentTarget.style.background = "var(--color-primary)";
+                                    e.currentTarget.style.color = "white";
+                                    e.currentTarget.style.borderColor = "var(--color-primary)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "none";
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.background = "var(--color-primary-soft)";
+                                    e.currentTarget.style.color = "var(--color-primary)";
+                                    e.currentTarget.style.borderColor = "rgba(94, 106, 210, 0.15)";
                                 }}
                             >
-                                View Original
-                                <ArrowRight size={12} strokeWidth={2} />
+                                <span style={{
+                                    position: "absolute",
+                                    inset: 0,
+                                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+                                    transform: "translateX(-100%)",
+                                    animation: "btn-shimmer 2s ease-in-out 1s 1 forwards",
+                                }} />
+                                <span style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "6px" }}>
+                                    View Original
+                                    <ArrowRight size={13} strokeWidth={2} />
+                                </span>
                             </button>
-                            <span style={{ fontSize: "11px", color: "var(--color-muted)" }}>
+                            <span style={{ fontSize: "11px", color: "var(--color-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
+                                <ShieldCheck size={11} strokeWidth={2} style={{ color: "var(--color-success)" }} />
                                 Source verified · Last synced 2h ago
                             </span>
+                            <style>{`
+                                @keyframes btn-shimmer {
+                                    to { transform: translateX(100%); }
+                                }
+                            `}</style>
                         </div>
                     </div>
 

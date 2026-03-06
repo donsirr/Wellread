@@ -141,7 +141,7 @@ export default function NarrativeIntelligence() {
                             <span
                                 role="button"
                                 tabIndex={0}
-                                onClick={() => openInspector({ id: "src-gmail", fileName: state.mcpSources[0]?.name || "Email", type: "gmail", verified: true, evidenceSnippet: "numbness in your toes" })}
+                                onClick={() => openInspector({ id: "src-gmail", fileName: state.mcpSources[0]?.name || "Email", type: "gmail", verified: true, evidenceSnippet: "numbness and tingling in my toes" })}
                                 style={{ fontWeight: 600, color: "var(--color-primary)", cursor: "pointer", borderBottom: "1px dashed var(--color-primary)" }}
                             >{state.narrative.highlight1}</span>{" "}
                             <span className="text-muted" style={{ fontSize: "12px" }}>{state.narrative.sourceText2}</span>

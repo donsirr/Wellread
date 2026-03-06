@@ -316,7 +316,7 @@ export default function VitalityGrid() {
                                     data={m.sparkData}
                                     gradientId={m.id}
                                     alert={m.isAlert}
-                                    showProjection={m.id === "blood-sugar" ? showProjection : false}
+                                    showProjection={m.id === "metric-hba1c" ? showProjection : false}
                                 />
                             </div>
                         </div>
