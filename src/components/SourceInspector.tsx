@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { X, ShieldCheck, FileText, Mail, Zap, Lightbulb, ArrowRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { X, ShieldCheck, FileText, Mail, Zap, Lightbulb, ArrowRight, Sparkles } from "lucide-react";
 import { useInspector } from "./InspectorContext";
 import { useStore } from "./StoreContext";
 
@@ -45,10 +45,83 @@ function CustomTooltip({ children, content }: { children: React.ReactNode, conte
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Auto-Highlight Evidence
+   ───────────────────────────────────────────────────────────── */
+
+function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }) {
+    const ref = useRef<HTMLElement>(null);
+    useEffect(() => {
+        if (snippet && ref.current) {
+            setTimeout(() => {
+                ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 300);
+        }
+    }, [snippet]);
+
+    if (!snippet) return <>{text}</>;
+
+    const parts = text.split(new RegExp(`(${snippet})`, 'gi'));
+    if (parts.length === 1) return <>{text}</>;
+
+    return (
+        <span style={{ position: "relative" }}>
+            {parts.map((part, i) =>
+                part.toLowerCase() === snippet.toLowerCase() ? (
+                    <mark
+                        key={i}
+                        ref={i === 1 ? ref : null}
+                        style={{
+                            background: "rgba(234, 179, 8, 0.2)",
+                            color: "inherit",
+                            borderBottom: "2px solid #EAB308",
+                            position: "relative",
+                            fontWeight: 600,
+                            padding: "2px 4px",
+                            borderRadius: "4px",
+                            boxShadow: "0 0 12px rgba(234, 179, 8, 0.4)"
+                        }}
+                    >
+                        {part}
+                        <span
+                            style={{
+                                position: "absolute",
+                                bottom: "calc(100% + 4px)",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                background: "white",
+                                border: "1px solid var(--color-border)",
+                                borderRadius: "6px",
+                                padding: "4px 8px",
+                                fontSize: "10px",
+                                fontWeight: 700,
+                                color: "#1B1B1B",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                whiteSpace: "nowrap",
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                zIndex: 10,
+                                pointerEvents: "none"
+                            }}
+                        >
+                            <Sparkles size={10} style={{ color: "#EAB308" }} />
+                            AI Found This
+                        </span>
+                        <style>{`mark::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 4px; border-style: solid; border-color: white transparent transparent transparent; margin-top: -12px; z-index: 10; pointer-events: none; }`}</style>
+                    </mark>
+                ) : (
+                    <span key={i}>{part}</span>
+                )
+            )}
+        </span>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Mock PDF Document Preview
    ───────────────────────────────────────────────────────────── */
 
-function PDFPreview() {
+function PDFPreview({ snippet }: { snippet?: string }) {
     const rows = [
         { test: "Glucose, Fasting", value: "142", range: "70–100 mg/dL", flag: "H", desc: "Blood sugar level after fasting for at least 8 hours." },
         { test: "BUN", value: "22", range: "7–20 mg/dL", flag: "H", desc: "Blood Urea Nitrogen, a measure of kidney function." },
@@ -135,8 +208,12 @@ function PDFPreview() {
                                 color: "var(--color-foreground)",
                             }}
                         >
-                            {row.highlight ? (
-                                <CustomTooltip content={row.desc}><span className="highlight-glow">{row.test}</span></CustomTooltip>
+                            {row.highlight || row.test.includes(snippet || "NO_MATCH") ? (
+                                <CustomTooltip content={row.desc}>
+                                    <span className="highlight-glow">
+                                        <EvidenceHighlight text={row.test} snippet={snippet} />
+                                    </span>
+                                </CustomTooltip>
                             ) : (
                                 <CustomTooltip content={row.desc}>{row.test}</CustomTooltip>
                             )}
@@ -146,6 +223,7 @@ function PDFPreview() {
                                 fontSize: "13px",
                                 fontWeight: row.highlight ? 700 : 500,
                                 color: row.flag === "H" ? "#EB5757" : "var(--color-foreground)",
+                                position: "relative"
                             }}
                         >
                             {row.highlight ? (
@@ -177,7 +255,7 @@ function PDFPreview() {
    Mock Gmail Thread Preview
    ───────────────────────────────────────────────────────────── */
 
-function GmailPreview() {
+function GmailPreview({ snippet }: { snippet?: string }) {
     const { state } = useStore();
     return (
         <div
@@ -233,7 +311,7 @@ function GmailPreview() {
                     <div style={{ paddingLeft: "40px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
                         <p>Hi Dr. Chen,</p>
                         <p style={{ marginTop: "8px" }}>
-                            I wanted to reach out about some new symptoms. Recently, <span className="highlight-glow" style={{ fontWeight: 500 }}>I've noticed recent numbness and tingling in my toes</span>, along with blurry vision that comes and goes throughout the day.
+                            I wanted to reach out about some new symptoms. Recently, <EvidenceHighlight text="I've noticed recent numbness and tingling in my toes" snippet={snippet} />, along with blurry vision that comes and goes throughout the day.
                         </p>
                         <p style={{ marginTop: "8px" }}>
                             It's been consistently bothering me, particularly at night, and I'm a bit worried since my last tests weren't great.
@@ -542,7 +620,7 @@ export default function SourceInspector() {
                         className="flex-1 overflow-y-auto"
                         style={{ padding: "24px" }}
                     >
-                        {type === "gmail" ? <GmailPreview /> : <PDFPreview />}
+                        {type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />}
 
                         {/* Bottom action */}
                         <div className="flex items-center gap-2 mt-4">

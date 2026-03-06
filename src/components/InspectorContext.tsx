@@ -9,6 +9,7 @@ export interface InspectorSource {
     fileName: string;
     type: SourceType;
     verified: boolean;
+    evidenceSnippet?: string;
 }
 
 interface InspectorContextValue {
