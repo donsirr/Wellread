@@ -1,0 +1,206 @@
+{
+    "patient": {
+        "name": "Juan Dela Cruz",
+        "dob": "Mar 7, 2026",
+        "fileCount": "4 files"
+    },
+    "sources": [
+        {
+            "id": "src-gmail",
+            "iconType": "Mail",
+            "name": "Health Correspondence",
+            "type": "Gmail Thread",
+            "date": "Mar 5, 2026",
+            "size": "3 messages",
+            "iconColor": "#5E6AD2",
+            "iconBg": "var(--color-primary-soft)",
+            "verified": true,
+            "inspectorType": "gmail",
+            "fileName": "RE_Follow_up_symptoms.eml"
+        },
+        {
+            "id": "src-lab-pdf",
+            "iconType": "FileText",
+            "name": "Complete Metabolic Panel",
+            "type": "PDF Document",
+            "date": "Mar 3, 2026",
+            "size": "2.4 MB",
+            "iconColor": "#EB5757",
+            "iconBg": "var(--color-danger-soft)",
+            "verified": true,
+            "inspectorType": "pdf",
+            "fileName": "LAB_RESULTS_JUAN.pdf"
+        },
+        {
+            "id": "src-endo",
+            "iconType": "Calendar",
+            "name": "Endocrinology Follow-up",
+            "type": "Appointment",
+            "date": "Mar 12, 2026",
+            "size": "Upcoming",
+            "iconColor": "#F2994A",
+            "iconBg": "rgba(242, 153, 74, 0.08)",
+            "verified": true,
+            "processing": 68,
+            "recentlyAdded": true,
+            "inspectorType": "pdf",
+            "fileName": "Endo_Appointment_Juan.pdf"
+        },
+        {
+            "id": "src-hba1c",
+            "iconType": "FileText",
+            "name": "HbA1c Trend Report",
+            "type": "PDF Document",
+            "date": "Mar 1, 2026",
+            "size": "1.1 MB",
+            "iconColor": "#EB5757",
+            "iconBg": "var(--color-danger-soft)",
+            "verified": true,
+            "processing": 42,
+            "recentlyAdded": true,
+            "inspectorType": "pdf",
+            "fileName": "HBA1C_TREND_JUAN.pdf"
+        }
+    ],
+    "vitals": [
+        {
+            "id": "blood-sugar",
+            "iconType": "Droplets",
+            "label": "Blood Sugar",
+            "value": "120/160",
+            "unit": "mg/dL",
+            "subLabel": "Fasting / Post-prandial",
+            "sparkData": [
+                40,
+                45,
+                55,
+                50,
+                62,
+                70,
+                68,
+                75,
+                82,
+                78,
+                85,
+                88,
+                80,
+                76,
+                82
+            ],
+            "isAlert": true,
+            "alertBadge": "High Risk"
+        },
+        {
+            "id": "heart-rate",
+            "iconType": "Heart",
+            "label": "Heart Rate",
+            "value": "72",
+            "unit": "bpm",
+            "subLabel": "Resting avg · 4h",
+            "sparkData": [
+                50,
+                52,
+                48,
+                55,
+                53,
+                50,
+                47,
+                52,
+                54,
+                50,
+                48,
+                53,
+                51,
+                49,
+                52
+            ]
+        },
+        {
+            "id": "blood-pressure",
+            "iconType": "Gauge",
+            "label": "Blood Pressure",
+            "value": "118/76",
+            "unit": "mmHg",
+            "subLabel": "Systolic / Diastolic",
+            "sparkData": [
+                60,
+                58,
+                62,
+                55,
+                50,
+                48,
+                52,
+                45,
+                42,
+                46,
+                40,
+                44,
+                42,
+                38,
+                40
+            ]
+        },
+        {
+            "id": "spo2",
+            "iconType": "Wind",
+            "label": "SpO₂",
+            "value": "97",
+            "unit": "%",
+            "subLabel": "Peripheral saturation",
+            "sparkData": [
+                90,
+                92,
+                91,
+                93,
+                94,
+                92,
+                95,
+                93,
+                94,
+                96,
+                95,
+                94,
+                96,
+                95,
+                97
+            ]
+        }
+    ],
+    "narrative": {
+        "title": "Clinical Correlation Detected",
+        "confidence": 92,
+        "sourceText1": "Juan, your persistent ",
+        "highlight1": "blurred vision",
+        "sourceText2": " (detected in Gmail) matches the ",
+        "highlight2": "8.2% HbA1c spike",
+        "sourceText3": " (in your recent Lab PDF).",
+        "insightSources": "2 sources · 14 data points"
+    },
+    "consultation": {
+        "trajectory": "Patient shows a gradually improving cardiovascular profile over 90 days, but glycemic markers are trending adversely. The divergence warrants integrated treatment review.",
+        "observations": [
+            {
+                "text": "HbA1c at 8.2% — exceeds ADA target of <7.0% by 1.2 percentage points.",
+                "severity": "high"
+            },
+            {
+                "text": "Blurred vision episodes correlate with post-prandial spikes >180 mg/dL.",
+                "severity": "high"
+            },
+            {
+                "text": "Current metformin 1000mg bid may require SGLT2 inhibitor augmentation.",
+                "severity": "medium"
+            },
+            {
+                "text": "Renal function stable (eGFR 78) — supports expanded pharmacotherapy.",
+                "severity": "low"
+            }
+        ],
+        "questions": [
+            "Has blurred vision frequency changed since last medication adjustment?",
+            "Any peripheral neuropathy symptoms — tingling, numbness, burning?",
+            "Meal timing and carbohydrate counting adherence?",
+            "Nocturnal hypoglycemia episodes? Using continuous glucose monitor?"
+        ]
+    }
+}
