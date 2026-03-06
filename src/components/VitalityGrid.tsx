@@ -166,26 +166,25 @@ interface MetricConfig {
     alertBadge?: string;
 }
 
-import data from "../data.json";
-
-const iconMap: Record<string, React.ElementType> = {
-    Droplets,
-    Heart,
-    Gauge,
-    Wind
-};
-
-const vitals: MetricConfig[] = data.vitals.map(v => ({
-    ...v,
-    icon: iconMap[v.iconType]
-}));
-
-/* ── VitalityGrid Component ── */
-
 import { useState } from "react";
+import { useStore } from "./StoreContext";
 
 export default function VitalityGrid() {
     const [showProjection, setShowProjection] = useState(false);
+    const { state } = useStore();
+
+    const iconMap: Record<string, React.ElementType> = {
+        Droplets,
+        Heart,
+        Gauge,
+        Wind
+    };
+
+    const vitals = state.clinicalMetrics.map((m: any) => ({
+        ...m,
+        icon: iconMap[m.iconType] || Heart
+    }));
+
     return (
         <section id="vitality-grid" style={{ marginBottom: "24px" }}>
             {/* Section label */}

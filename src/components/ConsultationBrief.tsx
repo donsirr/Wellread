@@ -61,20 +61,17 @@ function ToggleQuestion({ text, checked, onToggle }: { text: string; checked: bo
     );
 }
 
-/* ── Data ── */
-
-import data from "../data.json";
-
-const observations = data.consultation.observations.map(obs => obs.text);
-const questions = data.consultation.questions;
-
 /* ── ConsultationBrief Component ── */
 
 export default function ConsultationBrief() {
-    const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
-    const toggleItem = (i: number) => setCheckedItems((p) => ({ ...p, [i]: !p[i] }));
     const { isConsultationMode, toggleConsultationMode } = useConsultation();
     const { state } = useStore();
+
+    const observations = state.consultation?.observations?.map(obs => obs.text) || [];
+    const questions = state.consultation?.questions || [];
+
+    const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
+    const toggleItem = (i: number) => setCheckedItems((p) => ({ ...p, [i]: !p[i] }));
 
     return (
         <section id="consultation-brief">
@@ -179,7 +176,7 @@ export default function ConsultationBrief() {
                         Physician Consultation
                     </h3>
                     <p className="text-muted" style={{ fontSize: "12px", marginTop: "2px" }}>
-                        {data.patient.name} · {data.patient.dob}
+                        {state.patientProfile.name} · {state.patientProfile.dob}
                     </p>
                 </div>
 
@@ -215,7 +212,7 @@ export default function ConsultationBrief() {
                         className="text-foreground"
                         style={{ fontSize: "13px", lineHeight: 1.65, paddingLeft: "36px" }}
                     >
-                        Patient shows a <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>gradually improving cardiovascular profile</span> over 90 days, but glycemic markers are trending adversely. The divergence warrants integrated treatment review.
+                        {state.consultation?.trajectory}
                     </p>
                 </div>
 

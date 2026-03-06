@@ -7,12 +7,16 @@ export type PatientProfile = typeof initialState.patientProfile;
 export type McpSource = typeof initialState.mcpSources[0];
 export type ClinicalMetric = typeof initialState.clinicalMetrics[0];
 export type Correlation = typeof initialState.correlations[0];
+export type Narrative = typeof initialState.narrative;
+export type Consultation = typeof initialState.consultation;
 
 export interface StoreState {
     patientProfile: PatientProfile;
     mcpSources: McpSource[];
     clinicalMetrics: ClinicalMetric[];
     correlations: Correlation[];
+    narrative: Narrative;
+    consultation: Consultation;
     activeCorrelationId: string | null;
     healthGaps: string[];
 }

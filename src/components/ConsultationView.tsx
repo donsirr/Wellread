@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Share2, FileText, Calendar, User, AlertTriangle, Plus, TrendingUp, X } from "lucide-react";
 import { useConsultation } from "./ConsultationContext";
-import data from "../data.json";
+import { useStore } from "./StoreContext";
 
 /* ─────────────────────────────────────────────────────────────
    Mock QR Code (clean SVG pattern)
@@ -89,20 +89,17 @@ const cardVariants = {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   Data
-   ───────────────────────────────────────────────────────────── */
-
-const observations = data.consultation.observations;
-const questions = data.consultation.questions;
-
-const sevColor: Record<string, string> = { high: "#EB5757", medium: "#F2994A", low: "#4CB782" };
-
-/* ─────────────────────────────────────────────────────────────
    ConsultationView
    ───────────────────────────────────────────────────────────── */
 
 export default function ConsultationView() {
     const { toggleConsultationMode } = useConsultation();
+    const { state } = useStore();
+
+    const observations = state.consultation?.observations || [];
+    const questions = state.consultation?.questions || [];
+
+    const sevColor: Record<string, string> = { high: "#EB5757", medium: "#F2994A", low: "#4CB782" };
 
     return (
         <motion.div
@@ -181,7 +178,7 @@ export default function ConsultationView() {
                                     Physician Consultation
                                 </h1>
                                 <p style={{ fontSize: "14px", color: "var(--color-muted-foreground)", marginTop: "4px" }}>
-                                    {data.patient.name} · DOB: {data.patient.dob}
+                                    {state.patientProfile.name} · DOB: {state.patientProfile.dob}
                                 </p>
                             </div>
                         </div>
@@ -216,7 +213,7 @@ export default function ConsultationView() {
                             <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--color-muted)" }}>Trajectory</span>
                         </div>
                         <p style={{ fontSize: "18px", fontWeight: 500, lineHeight: 1.6, color: "var(--color-foreground)", letterSpacing: "-0.01em" }}>
-                            {data.consultation.trajectory}
+                            {state.consultation?.trajectory || "Generating optimal trajectory..."}
                         </p>
                     </motion.div>
 

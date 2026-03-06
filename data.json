@@ -1,47 +1,62 @@
 {
-    "patientProfile": {
+    "patient": {
         "name": "Elena Rossi",
-        "age": 32,
-        "conditions": [
-            "Asthma"
-        ],
-        "dob": "Oct 12, 1993"
+        "dob": "Oct 12, 1993",
+        "fileCount": "3 files"
     },
-    "mcpSources": [
+    "sources": [
         {
             "id": "src-gmail",
-            "type": "Gmail Thread",
-            "status": "analyzed",
-            "contentSnippet": "Experiencing heart racing after coffee this morning...",
+            "iconType": "Mail",
             "name": "Heart Rate Concerns",
+            "type": "Gmail Thread",
             "date": "Mar 5, 2026",
-            "iconType": "Mail"
+            "size": "3 messages",
+            "iconColor": "#5E6AD2",
+            "iconBg": "var(--color-primary-soft)",
+            "verified": true,
+            "inspectorType": "gmail",
+            "fileName": "Heart_Racing_Elena.eml"
         },
         {
             "id": "src-calendar",
-            "type": "Appointment",
-            "status": "analyzed",
-            "contentSnippet": "Started Albuterol (Asthma) - Dr. Smith",
+            "iconType": "Calendar",
             "name": "Asthma Action Plan Update",
+            "type": "Appointment",
             "date": "Mar 1, 2026",
-            "iconType": "Calendar"
+            "size": "Upcoming",
+            "iconColor": "#F2994A",
+            "iconBg": "rgba(242, 153, 74, 0.08)",
+            "verified": true,
+            "processing": 68,
+            "recentlyAdded": true,
+            "inspectorType": "calendar",
+            "fileName": "New_Asthma_Prescription.pdf"
         },
         {
             "id": "src-device",
-            "type": "PDF Document",
-            "status": "analyzed",
-            "contentSnippet": "BPM increased 65 -> 82",
+            "iconType": "FileText",
             "name": "Apple Watch Heart Rate Data",
+            "type": "PDF Document",
             "date": "Mar 5, 2026",
-            "iconType": "FileText"
+            "size": "1.1 MB",
+            "iconColor": "#EB5757",
+            "iconBg": "var(--color-danger-soft)",
+            "verified": true,
+            "processing": 42,
+            "recentlyAdded": true,
+            "inspectorType": "pdf",
+            "fileName": "AppleWatch_Vitals_Mar.pdf"
         }
     ],
-    "clinicalMetrics": [
+    "vitals": [
         {
-            "id": "metric-bpm",
+            "id": "heart-rate",
+            "iconType": "Heart",
             "label": "Heart Rate",
             "value": "82",
             "unit": "bpm",
+            "subLabel": "Resting avg · 4h",
             "sparkData": [
                 65,
                 66,
@@ -51,21 +66,9 @@
                 81,
                 82
             ],
-            "iconType": "Heart"
+            "isAlert": true,
+            "alertBadge": "Tachycardia"
         }
-    ],
-    "correlations": [
-        {
-            "id": "corr-elena",
-            "sourceID": "src-calendar",
-            "metricID": "metric-bpm",
-            "description": "Patient reports tachycardia. Though she attributes it to coffee, recent prescription of Albuterol (Mar 1) is a known beta-agonist that frequently causes elevated resting BPM (65 -> 82).",
-            "active": true
-        }
-    ],
-    "activeCorrelationId": "corr-elena",
-    "healthGaps": [
-        "Potential Gap: Tachycardia temporally linked to new Albuterol prescription, independent of caffeine. Ensure asthma inhaler dosage/frequency is evaluated."
     ],
     "narrative": {
         "title": "Clinical Correlation Detected",

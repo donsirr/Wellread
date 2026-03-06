@@ -2,7 +2,7 @@
 
 import { Mail, FileText, Zap, ArrowRight } from "lucide-react";
 import { useInspector } from "./InspectorContext";
-import data from "../data.json";
+import { useStore } from "./StoreContext";
 
 /* ── Confidence Ring ── */
 
@@ -93,6 +93,12 @@ function FlowConnectors() {
 
 export default function NarrativeIntelligence() {
     const { openInspector } = useInspector();
+    const { state } = useStore();
+
+    if (!state.narrative) {
+        return null;
+    }
+
     return (
         <section id="narrative-intelligence">
             <div className="section-header">
@@ -124,26 +130,26 @@ export default function NarrativeIntelligence() {
                         <div className="flex items-center gap-1.5 mb-2">
                             <Zap size={12} strokeWidth={2} style={{ color: "var(--color-primary)" }} />
                             <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-primary)" }}>
-                                {data.narrative.title}
+                                {state.narrative.title}
                             </span>
                         </div>
 
                         <p className="text-foreground" style={{ fontSize: "14px", lineHeight: 1.65, letterSpacing: "-0.01em" }}>
-                            {data.narrative.sourceText1}
+                            {state.narrative.sourceText1}
                             <span
                                 role="button"
                                 tabIndex={0}
-                                onClick={() => openInspector({ id: "src-gmail", fileName: data.sources[0].fileName, type: "gmail", verified: true })}
+                                onClick={() => openInspector({ id: "src-gmail", fileName: state.mcpSources[0]?.name || "Email", type: "gmail", verified: true })}
                                 style={{ fontWeight: 600, color: "var(--color-primary)", cursor: "pointer", borderBottom: "1px dashed var(--color-primary)" }}
-                            >{data.narrative.highlight1}</span>{" "}
-                            <span className="text-muted" style={{ fontSize: "12px" }}>{data.narrative.sourceText2}</span>
+                            >{state.narrative.highlight1}</span>{" "}
+                            <span className="text-muted" style={{ fontSize: "12px" }}>{state.narrative.sourceText2}</span>
                             <span
                                 role="button"
                                 tabIndex={0}
-                                onClick={() => openInspector({ id: "src-lab-pdf", fileName: data.sources[1].fileName, type: "pdf", verified: true })}
+                                onClick={() => openInspector({ id: "src-calendar", fileName: state.mcpSources[1]?.name || "Calendar", type: "pdf", verified: true })}
                                 style={{ fontWeight: 600, color: "#EB5757", cursor: "pointer", borderBottom: "1px dashed #EB5757" }}
-                            >{data.narrative.highlight2}</span>{" "}
-                            <span className="text-muted" style={{ fontSize: "12px" }}>{data.narrative.sourceText3}</span>
+                            >{state.narrative.highlight2}</span>{" "}
+                            <span className="text-muted" style={{ fontSize: "12px" }}>{state.narrative.sourceText3}</span>
                         </p>
 
                         <div className="flex items-center gap-3 mt-3">
@@ -166,14 +172,14 @@ export default function NarrativeIntelligence() {
                                 <ArrowRight size={12} strokeWidth={2} />
                             </button>
                             <span className="text-muted" style={{ fontSize: "11px" }}>
-                                {data.narrative.insightSources}
+                                {state.narrative.insightSources}
                             </span>
                         </div>
                     </div>
 
                     {/* Confidence Ring */}
                     <div style={{ flexShrink: 0, paddingLeft: "24px" }}>
-                        <ConfidenceRing score={data.narrative.confidence} />
+                        <ConfidenceRing score={state.narrative.confidence} />
                     </div>
                 </div>
             </div>

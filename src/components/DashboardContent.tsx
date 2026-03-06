@@ -6,9 +6,10 @@ import SourceArchive from "./SourceArchive";
 import ConsultationBrief from "./ConsultationBrief";
 import PrivacyGuard from "./PrivacyGuard";
 import SemanticSearch from "./SemanticSearch";
-import data from "../data.json";
+import { useStore } from "./StoreContext";
 
 export default function DashboardContent() {
+    const { state } = useStore();
     return (
         <div className="app-shell">
             {/* ── Left Panel — Source Archive ── */}
@@ -33,7 +34,7 @@ export default function DashboardContent() {
                             className="text-muted"
                             style={{ fontSize: "11px" }}
                         >
-                            {data.patient.fileCount}
+                            {state.mcpSources.length} files
                         </span>
                     </div>
 
@@ -65,7 +66,7 @@ export default function DashboardContent() {
                                 className="text-muted-foreground"
                                 style={{ fontSize: "13px", marginTop: "4px" }}
                             >
-                                Real-time clinical data synthesis for {data.patient.name}
+                                Real-time clinical data synthesis for {state.patientProfile.name}
                             </p>
                         </div>
                         <PrivacyGuard />

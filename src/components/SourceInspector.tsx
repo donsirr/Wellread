@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, ShieldCheck, FileText, Mail, Zap, Lightbulb, ArrowRight } from "lucide-react";
 import { useInspector } from "./InspectorContext";
-import data from "../data.json";
+import { useStore } from "./StoreContext";
 
 /* ─────────────────────────────────────────────────────────────
    Mock PDF Document Preview
@@ -139,6 +139,7 @@ function PDFPreview() {
    ───────────────────────────────────────────────────────────── */
 
 function GmailPreview() {
+    const { state } = useStore();
     return (
         <div
             style={{
@@ -160,7 +161,7 @@ function GmailPreview() {
                     Re: Follow-up on recent symptoms
                 </p>
                 <p style={{ fontSize: "12px", color: "var(--color-muted)", marginTop: "2px" }}>
-                    {data.patient.name.toLowerCase().replace(/\s+/g, ".")}@gmail.com → dr.chen@wellreadmed.com
+                    {state.patientProfile.name.toLowerCase().replace(/\s+/g, ".")}@gmail.com → dr.chen@wellreadmed.com
                 </p>
             </div>
 
@@ -183,10 +184,10 @@ function GmailPreview() {
                                 color: "var(--color-primary)",
                             }}
                         >
-                            {data.patient.name.split(" ").map(n => n[0]).join("")}
+                            {state.patientProfile.name.split(" ").map(n => n[0]).join("")}
                         </div>
                         <div>
-                            <span style={{ fontSize: "13px", fontWeight: 500 }}>{data.patient.name}</span>
+                            <span style={{ fontSize: "13px", fontWeight: 500 }}>{state.patientProfile.name}</span>
                             <span style={{ fontSize: "11px", color: "var(--color-muted)", marginLeft: "8px" }}>Mar 5, 2026 9:14 AM</span>
                         </div>
                     </div>
@@ -201,7 +202,7 @@ function GmailPreview() {
                         <p style={{ marginTop: "8px" }}>
                             Should I schedule an earlier appointment, or is this something we can address at my next visit?
                         </p>
-                        <p style={{ marginTop: "12px" }}>Best regards,<br />{data.patient.name.split(" ")[0]}</p>
+                        <p style={{ marginTop: "12px" }}>Best regards,<br />{state.patientProfile.name.split(" ")[0]}</p>
                     </div>
                 </div>
 
@@ -233,7 +234,7 @@ function GmailPreview() {
                         </div>
                     </div>
                     <div style={{ paddingLeft: "40px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
-                        <p>{data.patient.name.split(" ")[0]},</p>
+                        <p>{state.patientProfile.name.split(" ")[0]},</p>
                         <p style={{ marginTop: "8px" }}>
                             Thank you for letting me know. The blurred vision and increased thirst are important symptoms that we should investigate promptly. I&apos;m going to order a comprehensive metabolic panel and HbA1c test.
                         </p>
