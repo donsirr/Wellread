@@ -1,0 +1,92 @@
+{
+    "patientProfile": {
+        "name": "Juan Dela Cruz",
+        "age": 58,
+        "conditions": [
+            "Type 2 Diabetes",
+            "Hypertension"
+        ],
+        "dob": "Mar 7, 1968"
+    },
+    "mcpSources": [
+        {
+            "id": "src-gmail",
+            "type": "Gmail Thread",
+            "status": "analyzed",
+            "contentSnippet": "I have been experiencing persistent blurred vision...",
+            "name": "Health Correspondence",
+            "date": "Mar 5, 2026",
+            "iconType": "Mail"
+        },
+        {
+            "id": "src-lab-pdf",
+            "type": "PDF Document",
+            "status": "analyzed",
+            "contentSnippet": "HbA1c: 8.2% (H)",
+            "name": "Complete Metabolic Panel",
+            "date": "Mar 3, 2026",
+            "iconType": "FileText"
+        },
+        {
+            "id": "src-calendar",
+            "type": "Appointment",
+            "status": "pending",
+            "contentSnippet": "Endocrinology Follow-up with Dr. Chen",
+            "name": "Endocrinology Follow-up",
+            "date": "Mar 12, 2026",
+            "iconType": "Calendar"
+        }
+    ],
+    "clinicalMetrics": [
+        {
+            "id": "metric-hba1c",
+            "label": "HbA1c",
+            "value": "8.2",
+            "unit": "%",
+            "sparkData": [
+                7.0,
+                7.2,
+                7.1,
+                7.4,
+                7.6,
+                8.2
+            ],
+            "iconType": "Droplets"
+        },
+        {
+            "id": "metric-bp",
+            "label": "Blood Pressure",
+            "value": "118/76",
+            "unit": "mmHg",
+            "sparkData": [
+                60,
+                58,
+                62,
+                55,
+                50,
+                48,
+                52,
+                45,
+                42,
+                46,
+                40,
+                44,
+                42,
+                38,
+                40
+            ],
+            "iconType": "Gauge"
+        }
+    ],
+    "correlations": [
+        {
+            "id": "corr-1",
+            "sourceID": "src-gmail",
+            "metricID": "metric-hba1c",
+            "description": "Blurred vision symptom correlates with HbA1c spike.",
+            "active": false
+        }
+    ],
+    "activeCorrelationId": null,
+    "healthGaps": []
+}

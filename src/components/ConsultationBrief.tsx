@@ -10,6 +10,7 @@ import {
     Monitor,
 } from "lucide-react";
 import { useConsultation } from "./ConsultationContext";
+import { useStore } from "./StoreContext";
 
 /* ── Medical Cross Icon ── */
 
@@ -73,6 +74,7 @@ export default function ConsultationBrief() {
     const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
     const toggleItem = (i: number) => setCheckedItems((p) => ({ ...p, [i]: !p[i] }));
     const { isConsultationMode, toggleConsultationMode } = useConsultation();
+    const { state } = useStore();
 
     return (
         <section id="consultation-brief">
@@ -254,6 +256,18 @@ export default function ConsultationBrief() {
                                 </div>
                                 <p className="text-foreground" style={{ fontSize: "12.5px", lineHeight: 1.6 }}>
                                     {obs}
+                                </p>
+                            </div>
+                        ))}
+
+                        {/* Dynamic Health Gaps */}
+                        {state.healthGaps && state.healthGaps.map((gap, i) => (
+                            <div key={`gap-${i}`} className="flex items-start gap-2.5 mt-2 p-3 rounded-lg" style={{ background: "var(--color-danger-soft)", border: "1px solid rgba(235, 87, 87, 0.2)" }}>
+                                <div style={{ marginTop: "2px" }}>
+                                    <Plus size={14} strokeWidth={2.5} style={{ color: "var(--color-danger)" }} />
+                                </div>
+                                <p style={{ fontSize: "12px", lineHeight: 1.5, color: "var(--color-danger)", fontWeight: 500 }}>
+                                    <span style={{ fontWeight: 700 }}>AI FLAG:</span> {gap}
                                 </p>
                             </div>
                         ))}

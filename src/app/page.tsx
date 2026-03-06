@@ -7,6 +7,7 @@ import SourceInspector from "@/components/SourceInspector";
 import ConsultationView from "@/components/ConsultationView";
 import { InspectorProvider } from "@/components/InspectorContext";
 import { ConsultationProvider, useConsultation } from "@/components/ConsultationContext";
+import { StoreProvider } from "@/components/StoreContext";
 
 function AppContent() {
   const { isConsultationMode } = useConsultation();
@@ -30,10 +31,12 @@ function AppContent() {
 
 export default function Home() {
   return (
-    <ConsultationProvider>
-      <InspectorProvider>
-        <AppContent />
-      </InspectorProvider>
-    </ConsultationProvider>
+    <StoreProvider>
+      <ConsultationProvider>
+        <InspectorProvider>
+          <AppContent />
+        </InspectorProvider>
+      </ConsultationProvider>
+    </StoreProvider>
   );
 }

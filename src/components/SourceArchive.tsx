@@ -9,6 +9,8 @@ import {
     Sparkles,
 } from "lucide-react";
 import { useInspector, type SourceType } from "./InspectorContext";
+import { useStore } from "./StoreContext";
+import { useMcpOrchestrator } from "../mcpOrchestrator";
 
 /* ── Processing Bar ── */
 
@@ -86,105 +88,135 @@ interface SourceFile {
     fileName: string;
 }
 
-import data from "../data.json";
-
 const iconMap: Record<string, React.ElementType> = {
     Mail,
     FileText,
     Calendar: CalendarDays
 };
 
-const sources: SourceFile[] = data.sources.map(src => ({
-    ...src,
-    icon: iconMap[src.iconType] || FileText,
-    inspectorType: src.inspectorType as SourceType
-}));
-
 /* ── SourceArchive Component ── */
 
 export default function SourceArchive() {
     const { openInspector } = useInspector();
+    const { state } = useStore();
+    const { runSimulation, loadingProgress, isRunning, logs } = useMcpOrchestrator();
 
     return (
         <div id="source-archive" className="flex flex-col gap-2">
-            {sources.map((src) => (
-                <div
-                    key={src.id}
-                    id={src.id}
-                    className="source-file-card"
-                    style={{ padding: "14px 16px" }}
-                    onClick={() => openInspector({ id: src.id, fileName: src.fileName, type: src.inspectorType, verified: src.verified })}
-                >
-                    <div className="flex items-start gap-3">
-                        {/* Icon */}
-                        <div
-                            className="flex items-center justify-center"
-                            style={{
-                                width: "36px",
-                                height: "36px",
-                                borderRadius: "8px",
-                                background: src.iconBg,
-                                flexShrink: 0,
-                            }}
-                        >
-                            <src.icon
-                                size={18}
-                                strokeWidth={1.5}
-                                style={{ color: src.iconColor }}
-                            />
-                        </div>
+            {/* Run Button (for simulation demo) */}
+            <button
+                onClick={() => {
+                    if (!isRunning) runSimulation();
+                }}
+                disabled={isRunning}
+                style={{
+                    marginBottom: "8px",
+                    padding: "6px 12px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    borderRadius: "6px",
+                    background: isRunning ? "var(--color-surface-secondary)" : "var(--color-primary)",
+                    color: isRunning ? "var(--color-muted)" : "white",
+                    cursor: isRunning ? "default" : "pointer",
+                    border: "none"
+                }}
+            >
+                {isRunning ? "Intelligence Syncing..." : "Simulate MCP Sync"}
+            </button>
 
-                        {/* Info */}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2">
-                                <p
-                                    className="text-foreground"
-                                    style={{ fontSize: "13px", fontWeight: 500, lineHeight: 1.3 }}
-                                >
-                                    {src.name}
-                                </p>
-                                {src.recentlyAdded && (
-                                    <span
-                                        style={{
-                                            fontSize: "10px",
-                                            fontWeight: 500,
-                                            color: src.iconColor,
-                                            background: src.iconBg,
-                                            padding: "2px 6px",
-                                            borderRadius: "4px",
-                                            whiteSpace: "nowrap",
-                                            flexShrink: 0,
-                                        }}
-                                    >
-                                        New
-                                    </span>
-                                )}
+            {isRunning && (
+                <div style={{ padding: "8px", fontSize: "11px", color: "var(--color-primary)", background: "var(--color-primary-soft)", borderRadius: "6px", marginBottom: "8px" }}>
+                    {logs[logs.length - 1]}
+                </div>
+            )}
+
+            {state.mcpSources.map((src, index) => {
+                const isPending = src.status === "pending";
+                const IconComponent = iconMap[src.iconType] || FileText;
+
+                // Color defaults mapping based on iconType
+                const colorMap: Record<string, { iconColor: string, iconBg: string, inspectorType: SourceType }> = {
+                    "Mail": { iconColor: "#5E6AD2", iconBg: "rgba(94, 106, 210, 0.08)", inspectorType: "gmail" },
+                    "FileText": { iconColor: "#EB5757", iconBg: "rgba(235, 87, 87, 0.06)", inspectorType: "pdf" },
+                    "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "calendar" }
+                };
+
+                const styleConfig = colorMap[src.iconType] || colorMap["FileText"];
+
+                return (
+                    <div
+                        key={src.id}
+                        id={src.id}
+                        className={`source-file-card ${isPending ? 'opacity-60' : ''}`}
+                        style={{ padding: "14px 16px" }}
+                        onClick={() => {
+                            if (isPending) return;
+                            openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true })
+                        }}
+                    >
+                        <div className="flex items-start gap-3">
+                            {/* Icon */}
+                            <div
+                                className="flex items-center justify-center"
+                                style={{
+                                    width: "36px",
+                                    height: "36px",
+                                    borderRadius: "8px",
+                                    background: styleConfig.iconBg,
+                                    flexShrink: 0,
+                                }}
+                            >
+                                <IconComponent
+                                    size={18}
+                                    strokeWidth={1.5}
+                                    style={{ color: styleConfig.iconColor }}
+                                />
                             </div>
 
-                            <div
-                                className="flex items-center gap-2 mt-0.5"
-                                style={{ fontSize: "11px", color: "var(--color-muted)" }}
-                            >
-                                <span className="flex items-center gap-1">
-                                    <Clock size={9} strokeWidth={2} />
-                                    {src.date}
-                                </span>
-                                <span>·</span>
-                                <span>{src.size}</span>
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex flex-col gap-0.5 mt-1">
+                                    <p
+                                        className="text-foreground"
+                                        style={{ fontSize: "13px", fontWeight: 500, lineHeight: 1.3 }}
+                                    >
+                                        {src.name}
+                                    </p>
+                                    {isPending && (
+                                        <span
+                                            style={{
+                                                fontSize: "10px",
+                                                fontWeight: 500,
+                                                color: styleConfig.iconColor,
+                                                background: styleConfig.iconBg,
+                                                padding: "2px 6px",
+                                                borderRadius: "4px",
+                                                whiteSpace: "nowrap",
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            Pending
+                                        </span>
+                                    )}
+                                </div>
+
+                                <p style={{ fontSize: "11px", color: "var(--color-muted-foreground)", lineHeight: 1.4, marginTop: "2px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                                    {src.contentSnippet}
+                                </p>
                             </div>
 
                             {/* Verified or Processing */}
                             <div className="mt-2 flex items-center gap-2">
-                                {src.verified && <VerifiedBadge />}
+                                {!isPending && <VerifiedBadge />}
                             </div>
 
-                            {src.processing !== undefined && (
-                                <ProcessingBar progress={src.processing} color={src.iconColor} />
+                            {isPending && isRunning && (
+                                <ProcessingBar progress={loadingProgress} color={styleConfig.iconColor} />
                             )}
                         </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 }
