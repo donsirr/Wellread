@@ -68,20 +68,16 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
             {parts.map((part, i) =>
                 part.toLowerCase() === snippet.toLowerCase() ? (
                     <mark
+                        className="highlighter-glow-effect"
                         key={i}
                         ref={i === 1 ? ref : null}
                         style={{
-                            backgroundImage: "linear-gradient(to right, rgba(234, 179, 8, 0.35) 50%, transparent 50%)",
-                            backgroundSize: "200% 100%",
-                            backgroundPosition: "100% 0",
                             color: "inherit",
-                            borderBottom: "2px solid #EAB308",
+                            borderBottom: "2px solid rgba(234, 179, 8, 0.5)",
                             position: "relative",
                             fontWeight: 600,
                             padding: "2px 4px",
                             borderRadius: "4px",
-                            boxShadow: "0 0 12px rgba(234, 179, 8, 0.4)",
-                            animation: "highlighter-sweep 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards"
                         }}
                     >
                         {part}
@@ -113,8 +109,23 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                             AI Found This
                         </span>
                         <style>{`
-                            @keyframes highlighter-sweep {
-                                to { background-position: 0 0; }
+                            .highlighter-glow-effect {
+                                background-color: rgba(234, 179, 8, 0.15);
+                                background-image: linear-gradient(
+                                    90deg, 
+                                    transparent 0%, 
+                                    transparent 30%, 
+                                    rgba(234, 179, 8, 0.6) 50%, 
+                                    transparent 70%, 
+                                    transparent 100%
+                                );
+                                background-size: 200% 100%;
+                                background-position: -100% 0;
+                                animation: highlighter-moving-glow 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                            }
+                            @keyframes highlighter-moving-glow {
+                                0% { background-position: 200% 0; }
+                                100% { background-position: -100% 0; }
                             }
                             @keyframes pop-in {
                                 to { opacity: 1; transform: translate(-50%, 0) scale(1); }
@@ -122,7 +133,13 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                             @keyframes pop-in-arrow {
                                 to { opacity: 1; transform: translate(-50%, 0); }
                             }
-                            mark::after { content: ''; position: absolute; top: 100%; left: 50%; opacity: 0; transform: translate(-50%, 10px); border-width: 4px; border-style: solid; border-color: white transparent transparent transparent; margin-top: -12px; z-index: 10; pointer-events: none; animation: pop-in-arrow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards; }
+                            mark.highlighter-glow-effect::after { 
+                                content: ''; position: absolute; top: 100%; left: 50%; opacity: 0; 
+                                transform: translate(-50%, 10px); border-width: 4px; border-style: solid; 
+                                border-color: white transparent transparent transparent; margin-top: -12px; 
+                                z-index: 10; pointer-events: none; 
+                                animation: pop-in-arrow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards; 
+                            }
                         `}</style>
                     </mark>
                 ) : (
