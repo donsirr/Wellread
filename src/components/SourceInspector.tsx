@@ -71,14 +71,17 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                         key={i}
                         ref={i === 1 ? ref : null}
                         style={{
-                            background: "rgba(234, 179, 8, 0.2)",
+                            backgroundImage: "linear-gradient(to right, rgba(234, 179, 8, 0.35) 50%, transparent 50%)",
+                            backgroundSize: "200% 100%",
+                            backgroundPosition: "100% 0",
                             color: "inherit",
                             borderBottom: "2px solid #EAB308",
                             position: "relative",
                             fontWeight: 600,
                             padding: "2px 4px",
                             borderRadius: "4px",
-                            boxShadow: "0 0 12px rgba(234, 179, 8, 0.4)"
+                            boxShadow: "0 0 12px rgba(234, 179, 8, 0.4)",
+                            animation: "highlighter-sweep 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards"
                         }}
                     >
                         {part}
@@ -87,7 +90,8 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                                 position: "absolute",
                                 bottom: "calc(100% + 4px)",
                                 left: "50%",
-                                transform: "translateX(-50%)",
+                                opacity: 0,
+                                transform: "translate(-50%, 10px) scale(0.9)",
                                 background: "white",
                                 border: "1px solid var(--color-border)",
                                 borderRadius: "6px",
@@ -101,13 +105,25 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                                 whiteSpace: "nowrap",
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                                 zIndex: 10,
-                                pointerEvents: "none"
+                                pointerEvents: "none",
+                                animation: "pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards"
                             }}
                         >
                             <Sparkles size={10} style={{ color: "#EAB308" }} />
                             AI Found This
                         </span>
-                        <style>{`mark::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 4px; border-style: solid; border-color: white transparent transparent transparent; margin-top: -12px; z-index: 10; pointer-events: none; }`}</style>
+                        <style>{`
+                            @keyframes highlighter-sweep {
+                                to { background-position: 0 0; }
+                            }
+                            @keyframes pop-in {
+                                to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+                            }
+                            @keyframes pop-in-arrow {
+                                to { opacity: 1; transform: translate(-50%, 0); }
+                            }
+                            mark::after { content: ''; position: absolute; top: 100%; left: 50%; opacity: 0; transform: translate(-50%, 10px); border-width: 4px; border-style: solid; border-color: white transparent transparent transparent; margin-top: -12px; z-index: 10; pointer-events: none; animation: pop-in-arrow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards; }
+                        `}</style>
                     </mark>
                 ) : (
                     <span key={i}>{part}</span>
