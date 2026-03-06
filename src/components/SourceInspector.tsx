@@ -121,7 +121,7 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                                 );
                                 background-size: 200% 100%;
                                 background-position: -100% 0;
-                                animation: highlighter-moving-glow 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                                animation: highlighter-moving-glow 1.5s cubic-bezier(0.4, 0, 0.2, 1) 1 forwards 0.6s;
                             }
                             @keyframes highlighter-moving-glow {
                                 0% { background-position: 200% 0; }
