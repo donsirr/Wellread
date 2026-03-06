@@ -181,8 +181,8 @@ export default function SourceArchive() {
                                 />
                             </div>
 
-                            {/* Info */}
-                            <div className="flex-1 min-w-0">
+                            {/* Info and Action Container */}
+                            <div className="flex-1 min-w-0 flex flex-col">
                                 <div className="flex flex-col gap-0.5 mt-1">
                                     <p
                                         className="text-foreground"
@@ -211,16 +211,57 @@ export default function SourceArchive() {
                                 <p style={{ fontSize: "11px", color: "var(--color-muted-foreground)", lineHeight: 1.4, marginTop: "2px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                     {src.contentSnippet}
                                 </p>
-                            </div>
 
-                            {/* Verified or Processing */}
-                            <div className="mt-2 flex items-center gap-2">
-                                {!isPending && <VerifiedBadge />}
-                            </div>
+                                {/* Verified or Processing / Action Button */}
+                                <div className="mt-3 flex items-center justify-between w-full">
+                                    <div className="flex items-center gap-2">
+                                        {!isPending && <VerifiedBadge />}
+                                    </div>
+                                    {!isPending && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                let evidenceSnippet: string | undefined;
+                                                if (src.id === "src-gmail") evidenceSnippet = "numbness in your toes";
+                                                if (src.id === "src-lab-pdf") evidenceSnippet = "HbA1c";
+                                                if (src.id === "src-calendar") evidenceSnippet = "persistent neuropathy";
 
-                            {isPending && isRunning && (
-                                <ProcessingBar progress={100} color={styleConfig.iconColor} />
-                            )}
+                                                openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true, evidenceSnippet });
+                                            }}
+                                            style={{
+                                                fontSize: "10px",
+                                                fontWeight: 600,
+                                                color: styleConfig.iconColor,
+                                                background: "var(--color-surface)",
+                                                border: `1px solid ${styleConfig.iconColor}33`,
+                                                padding: "4px 10px",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = "translateY(-1.5px)";
+                                                e.currentTarget.style.boxShadow = `0 6px 12px ${styleConfig.iconColor}33`; // 20% opacity hex
+                                                e.currentTarget.style.background = styleConfig.iconColor;
+                                                e.currentTarget.style.color = "white";
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = "none";
+                                                e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02)";
+                                                e.currentTarget.style.background = "var(--color-surface)";
+                                                e.currentTarget.style.color = styleConfig.iconColor;
+                                            }}
+                                        >
+                                            View Original
+                                        </button>
+                                    )}
+                                </div>
+
+                                {isPending && isRunning && (
+                                    <ProcessingBar progress={100} color={styleConfig.iconColor} />
+                                )}
+                            </div>
                         </div>
                     </div>
                 );
