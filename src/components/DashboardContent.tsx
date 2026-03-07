@@ -169,7 +169,7 @@ export default function DashboardContent() {
                 </aside>
 
                 {/* ── Center Panel — Intelligence Feed ── */}
-                <section className="panel panel-center relative z-20" style={{ overflow: "hidden" }}>
+                <section className="panel panel-center relative z-20" style={{ overflowX: "hidden" }}>
                     <div style={{ padding: "28px 32px" }}>
                         {/* Semantic Search Bar */}
                         <SemanticSearch />

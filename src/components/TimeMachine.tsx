@@ -35,13 +35,22 @@ const TIMELINE_DATA: TimelineEvent[] = [
 
 function EventTooltip({ event, x, y }: { event: TimelineEvent; x: number; y: number }) {
     const sourceIcon = event.source === "Gmail" ? "📧" : event.source === "Calendar" ? "📅" : "📄";
+
+    // Convert SVG viewBox coordinates (700x200) to percentages for responsive HTML overlay positioning
+    const leftPct = (x / 700) * 100;
+    const topPct = (y / 200) * 100;
+
+    const isLeftEdge = x < 120;
+    const isRightEdge = x > 580;
+
     return (
         <div
             style={{
                 position: "absolute",
-                left: `${x}px`,
-                top: `${y - 70}px`,
-                transform: "translateX(-50%)",
+                left: `${leftPct}%`,
+                top: `${topPct}%`,
+                transform: `translate(${isLeftEdge ? "10px" : isRightEdge ? "calc(-100% - 10px)" : "-50%"}, -100%)`,
+                marginTop: "-14px", // Default state, animated by tooltip-in
                 background: "rgba(30, 30, 35, 0.95)",
                 backdropFilter: "blur(12px)",
                 color: "white",
@@ -179,7 +188,7 @@ function TimelineChart({
                         x1={padX} y1={targetY} x2={W - padX} y2={targetY}
                         stroke="#27AE60" strokeWidth="1" strokeDasharray="6 3" opacity="0.5"
                     />
-                    <text x={W - padX + 4} y={targetY + 3} fontSize="9" fill="#27AE60" fontWeight="600" fontFamily="Inter, sans-serif">
+                    <text x={W - padX} y={targetY - 5} textAnchor="end" fontSize="9" fill="#27AE60" fontWeight="600" fontFamily="Inter, sans-serif">
                         6.8% Target
                     </text>
                 </g>
@@ -522,8 +531,8 @@ export default function TimeMachine() {
                     to { opacity: 1; }
                 }
                 @keyframes tooltip-in {
-                    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                    from { opacity: 0; margin-top: -6px; }
+                    to { opacity: 1; margin-top: -14px; }
                 }
                 /* Apple-style range slider thumb */
                 #time-machine input[type="range"]::-webkit-slider-thumb {

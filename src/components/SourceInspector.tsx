@@ -102,7 +102,7 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                                 zIndex: 10,
                                 pointerEvents: "none",
-                                animation: "pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards"
+                                animation: "pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards, fade-out 0.3s ease 2.3s forwards"
                             }}
                         >
                             <Sparkles size={10} style={{ color: "#EAB308" }} />
@@ -130,12 +130,15 @@ function EvidenceHighlight({ text, snippet }: { text: string; snippet?: string }
                             @keyframes pop-in-arrow {
                                 to { opacity: 1; transform: translate(-50%, 0); }
                             }
+                            @keyframes fade-out {
+                                to { opacity: 0; }
+                            }
                             mark.highlighter-glow-effect::after { 
                                 content: ''; position: absolute; top: 100%; left: 50%; opacity: 0; 
                                 transform: translate(-50%, 10px); border-width: 4px; border-style: solid; 
                                 border-color: white transparent transparent transparent; margin-top: -12px; 
                                 z-index: 10; pointer-events: none; 
-                                animation: pop-in-arrow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards; 
+                                animation: pop-in-arrow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards, fade-out 0.3s ease 2.3s forwards; 
                             }
                         `}</style>
                     </mark>
