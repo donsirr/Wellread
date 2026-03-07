@@ -214,10 +214,9 @@ export default function DashboardContent() {
 
                 {/* ── Right Panel — Consultation Brief ── */}
                 <aside
-                    className="panel panel-right"
+                    className="panel panel-right lg:w-96"
                     style={{
-                        width: "400px",
-                        minWidth: "400px",
+                        width: "clamp(280px, 25vw, 400px)",
                         borderLeft: "1px solid var(--color-border)",
                     }}
                 >

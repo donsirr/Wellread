@@ -302,7 +302,7 @@ function GmailPreview({ snippet }: { snippet?: string }) {
             {/* Email header */}
             <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)" }}>
                 <div className="flex items-center gap-2 mb-1">
-                    <Mail size={14} strokeWidth={1.5} style={{ color: "#5E6AD2" }} />
+                    <Mail size={14} strokeWidth={1.5} style={{ color: "#5170FF" }} />
                     <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-muted)" }}>
                         Gmail Thread
                     </span>
@@ -563,7 +563,7 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" | "clinic
                     padding: "12px",
                     borderRadius: "8px",
                     background: "var(--color-primary-soft)",
-                    border: "1px solid rgba(94, 106, 210, 0.10)",
+                    border: "1px solid rgba(81, 112, 255, 0.10)",
                 }}
             >
                 <div className="flex items-center gap-1.5 mb-1">
@@ -735,7 +735,7 @@ export default function SourceInspector() {
                                     background: "var(--color-primary-soft)",
                                     padding: "10px 18px",
                                     borderRadius: "10px",
-                                    border: "1px solid rgba(94, 106, 210, 0.15)",
+                                    border: "1px solid rgba(81, 112, 255, 0.15)",
                                     cursor: "pointer",
                                     display: "flex",
                                     alignItems: "center",
@@ -746,7 +746,7 @@ export default function SourceInspector() {
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "translateY(-2px)";
-                                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(94, 106, 210, 0.25)";
+                                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(81, 112, 255, 0.25)";
                                     e.currentTarget.style.background = "var(--color-primary)";
                                     e.currentTarget.style.color = "white";
                                     e.currentTarget.style.borderColor = "var(--color-primary)";
@@ -756,7 +756,7 @@ export default function SourceInspector() {
                                     e.currentTarget.style.boxShadow = "none";
                                     e.currentTarget.style.background = "var(--color-primary-soft)";
                                     e.currentTarget.style.color = "var(--color-primary)";
-                                    e.currentTarget.style.borderColor = "rgba(94, 106, 210, 0.15)";
+                                    e.currentTarget.style.borderColor = "rgba(81, 112, 255, 0.15)";
                                 }}
                             >
                                 <span style={{

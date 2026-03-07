@@ -148,12 +148,12 @@ function TimelineChart({
         >
             <defs>
                 <linearGradient id="tm-past-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#5E6AD2" />
+                    <stop offset="0%" stopColor="#5170FF" />
                     <stop offset="100%" stopColor="#818CF8" />
                 </linearGradient>
                 <linearGradient id="tm-area-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#5E6AD2" stopOpacity="0.12" />
-                    <stop offset="100%" stopColor="#5E6AD2" stopOpacity="0" />
+                    <stop offset="0%" stopColor="#5170FF" stopOpacity="0.12" />
+                    <stop offset="100%" stopColor="#5170FF" stopOpacity="0" />
                 </linearGradient>
                 <filter id="glow-red">
                     <feGaussianBlur stdDeviation="4" result="blur" />
@@ -254,7 +254,7 @@ function TimelineChart({
                         <circle
                             cx={p.x} cy={p.y} r={3.5}
                             fill="white"
-                            stroke="#5E6AD2"
+                            stroke="#5170FF"
                             strokeWidth="2"
                             style={{
                                 transition: "r 0.15s ease",
@@ -420,7 +420,7 @@ export default function TimeMachine() {
                 {/* Legend */}
                 <div className="flex items-center gap-4" style={{ marginBottom: "16px" }}>
                     <div className="flex items-center gap-1.5">
-                        <div style={{ width: "16px", height: "2px", borderRadius: "1px", background: "linear-gradient(90deg, #5E6AD2, #818CF8)" }} />
+                        <div style={{ width: "16px", height: "2px", borderRadius: "1px", background: "linear-gradient(90deg, #5170FF, #818CF8)" }} />
                         <span style={{ fontSize: "10px", color: "var(--color-muted)", fontWeight: 500 }}>Historical</span>
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -462,7 +462,7 @@ export default function TimeMachine() {
                             borderRadius: "2px",
                             outline: "none",
                             cursor: "pointer",
-                            background: `linear-gradient(90deg, #5E6AD2 0%, #5E6AD2 ${sliderValue}%, var(--color-border) ${sliderValue}%, var(--color-border) 100%)`,
+                            background: `linear-gradient(90deg, #5170FF 0%, #5170FF ${sliderValue}%, var(--color-border) ${sliderValue}%, var(--color-border) 100%)`,
                         }}
                     />
                 </div>
@@ -541,13 +541,13 @@ export default function TimeMachine() {
                     height: 16px;
                     border-radius: 50%;
                     background: white;
-                    border: 2px solid #5E6AD2;
-                    box-shadow: 0 2px 6px rgba(94, 106, 210, 0.3);
+                    border: 2px solid #5170FF;
+                    box-shadow: 0 2px 6px rgba(81, 112, 255, 0.3);
                     cursor: pointer;
                     transition: box-shadow 0.2s ease, transform 0.2s ease;
                 }
                 #time-machine input[type="range"]::-webkit-slider-thumb:hover {
-                    box-shadow: 0 4px 12px rgba(94, 106, 210, 0.45);
+                    box-shadow: 0 4px 12px rgba(81, 112, 255, 0.45);
                     transform: scale(1.15);
                 }
                 #time-machine input[type="range"]::-moz-range-thumb {
@@ -555,8 +555,8 @@ export default function TimeMachine() {
                     height: 16px;
                     border-radius: 50%;
                     background: white;
-                    border: 2px solid #5E6AD2;
-                    box-shadow: 0 2px 6px rgba(94, 106, 210, 0.3);
+                    border: 2px solid #5170FF;
+                    box-shadow: 0 2px 6px rgba(81, 112, 255, 0.3);
                     cursor: pointer;
                 }
             `}</style>

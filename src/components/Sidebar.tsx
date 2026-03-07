@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import {
     LayoutDashboard,
     Activity,
@@ -48,16 +49,7 @@ export default function Sidebar() {
                     background: "var(--color-primary-soft)",
                 }}
             >
-                <span
-                    style={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        color: "var(--color-primary)",
-                        letterSpacing: "-0.02em",
-                    }}
-                >
-                    W
-                </span>
+                <Image src="/favicon/favicon.svg" alt="WellRead" width={20} height={20} />
             </div>
 
             {/* Main nav */}

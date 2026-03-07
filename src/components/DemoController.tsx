@@ -66,8 +66,8 @@ export default function DemoController() {
 }
 
 const btnStyle = (isActive: boolean) => ({
-    background: isActive ? "rgba(94, 106, 210, 0.2)" : "rgba(255, 255, 255, 0.05)",
-    border: isActive ? "1px solid rgba(94, 106, 210, 0.5)" : "1px solid rgba(255, 255, 255, 0.1)",
+    background: isActive ? "rgba(81, 112, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
+    border: isActive ? "1px solid rgba(81, 112, 255, 0.5)" : "1px solid rgba(255, 255, 255, 0.1)",
     borderRadius: "8px",
     padding: "8px 12px",
     color: isActive ? "#818CF8" : "#E2E8F0",

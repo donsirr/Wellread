@@ -18,7 +18,7 @@ interface SparklineProps {
 function Sparkline({
     data,
     gradientId,
-    colorFrom = "#5E6AD2",
+    colorFrom = "#5170FF",
     colorTo = "#818CF8",
     alert = false,
     width = 200,

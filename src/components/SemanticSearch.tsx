@@ -126,7 +126,7 @@ export default function SemanticSearch() {
                 className="relative w-full mb-8 z-20"
             >
                 <div
-                    className={`flex items-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md border rounded-2xl transition-all duration-300 ${isThinking ? "border-primary/50 shadow-[0_0_15px_rgba(94,106,210,0.2)]" : "border-white/40 shadow-xl shadow-slate-200/50"
+                    className={`flex items-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md border rounded-2xl transition-all duration-300 ${isThinking ? "border-primary/50 shadow-[0_0_15px_rgba(81, 112, 255,0.2)]" : "border-white/40 shadow-xl shadow-slate-200/50"
                         }`}
                 >
                     {isThinking ? (
@@ -168,7 +168,7 @@ export default function SemanticSearch() {
                             borderRadius: `${line.rect.borderRadius}px`,
                             pointerEvents: "none",
                             zIndex: 10,
-                            boxShadow: "0 0 0 2px var(--color-primary), 0 4px 20px rgba(94,106,210,0.15)"
+                            boxShadow: "0 0 0 2px var(--color-primary), 0 4px 20px rgba(81, 112, 255,0.15)"
                         }}
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -201,8 +201,8 @@ export default function SemanticSearch() {
                                 zIndex: 50,
                                 background: "rgba(255, 255, 255, 0.95)",
                                 backdropFilter: "blur(12px)",
-                                border: "1px solid rgba(94, 106, 210, 0.2)",
-                                boxShadow: "0 8px 30px rgba(94, 106, 210, 0.15)",
+                                border: "1px solid rgba(81, 112, 255, 0.2)",
+                                boxShadow: "0 8px 30px rgba(81, 112, 255, 0.15)",
                                 padding: "6px 12px",
                                 borderRadius: "20px",
                                 display: "flex",

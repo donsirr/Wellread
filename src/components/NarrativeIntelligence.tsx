@@ -18,7 +18,7 @@ function ConfidenceRing({ score, size = 80, strokeWidth = 6 }: { score: number; 
                 <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                     <defs>
                         <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#5E6AD2" />
+                            <stop offset="0%" stopColor="#5170FF" />
                             <stop offset="100%" stopColor="#818CF8" />
                         </linearGradient>
                     </defs>
@@ -68,16 +68,16 @@ function FlowConnectors() {
         <svg viewBox="0 0 100 160" fill="none" style={{ width: "100px", height: "160px", overflow: "visible", flexShrink: 0 }}>
             <defs>
                 <linearGradient id="fc1" x1="0%" y1="50%" x2="100%" y2="50%">
-                    <stop offset="0%" stopColor="#5E6AD2" stopOpacity="0.3" />
+                    <stop offset="0%" stopColor="#5170FF" stopOpacity="0.3" />
                     <stop offset="100%" stopColor="#818CF8" stopOpacity="0.6" />
                 </linearGradient>
                 <linearGradient id="fc2" x1="0%" y1="50%" x2="100%" y2="50%">
                     <stop offset="0%" stopColor="#EB5757" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#5E6AD2" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#5170FF" stopOpacity="0.6" />
                 </linearGradient>
             </defs>
             <path d="M 0,40 C 35,40 65,70 100,80" stroke="url(#fc1)" strokeWidth="1" strokeDasharray="4 4" style={{ animation: "flow-dash 1.5s linear infinite" }} />
-            <circle r="2.5" fill="#5E6AD2">
+            <circle r="2.5" fill="#5170FF">
                 <animateMotion dur="3s" repeatCount="indefinite" path="M 0,40 C 35,40 65,70 100,80" />
                 <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3s" repeatCount="indefinite" />
             </circle>
@@ -216,7 +216,7 @@ export default function NarrativeIntelligence() {
                 <div style={{ display: "flex", alignItems: "center", gap: "0" }}>
                     {/* Source Bubbles */}
                     <div className="flex flex-col items-center" style={{ gap: "24px", flexShrink: 0 }}>
-                        <SourceBubble icon={Mail} label="Gmail" color="#5E6AD2" bgColor="var(--color-primary-soft)" />
+                        <SourceBubble icon={Mail} label="Gmail" color="#5170FF" bgColor="var(--color-primary-soft)" />
                         <SourceBubble icon={FileText} label="Lab PDF" color="#EB5757" bgColor="var(--color-danger-soft)" />
                     </div>
 

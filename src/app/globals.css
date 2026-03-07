@@ -14,9 +14,9 @@
   --color-border: #E6E6E6;
   --color-border-subtle: #F0F0F0;
 
-  --color-primary: #5E6AD2;
-  --color-primary-soft: rgba(94, 106, 210, 0.08);
-  --color-primary-medium: rgba(94, 106, 210, 0.14);
+  --color-primary: #5170FF;
+  --color-primary-soft: rgba(81, 112, 255, 0.08);
+  --color-primary-medium: rgba(81, 112, 255, 0.14);
   --color-primary-hover: #4F5BBF;
 
   --color-success: #4CB782;
@@ -92,10 +92,11 @@ body {
 .app-shell {
   display: flex;
   flex: 1 1 0%;
-  min-width: 0;
+  min-width: 1024px;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .panel {
@@ -121,7 +122,7 @@ body {
 }
 
 .panel-left {
-  width: 320px;
+  width: clamp(240px, 22vw, 320px);
   flex-shrink: 0;
   border-right: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -287,7 +288,7 @@ body {
 }
 
 .card-glow:hover::before {
-  border-color: rgba(94, 106, 210, 0.15);
+  border-color: rgba(81, 112, 255, 0.15);
 }
 
 /* ── Clinical Alert ── */
@@ -471,7 +472,7 @@ body {
 
 .btn-gloss:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(94, 106, 210, 0.25);
+  box-shadow: 0 4px 16px rgba(81, 112, 255, 0.25);
 }
 
 .btn-gloss:hover::after {

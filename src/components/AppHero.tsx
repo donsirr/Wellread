@@ -51,12 +51,12 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                         width: "64px",
                         height: "64px",
                         borderRadius: "18px",
-                        background: "linear-gradient(135deg, #0066FF 0%, #3385FF 100%)",
+                        background: "linear-gradient(135deg, #5170FF 0%, #7E95FF 100%)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: "24px",
-                        boxShadow: "0 8px 24px rgba(0, 102, 255, 0.3)",
+                        boxShadow: "0 8px 24px rgba(81, 112, 255, 0.3)",
                     }}
                 >
                     <ShieldCheck size={32} color="white" strokeWidth={2.5} />
@@ -96,8 +96,8 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                             gap: "12px",
                             padding: "16px",
                             borderRadius: "16px",
-                            background: agreeTos ? "rgba(0, 102, 255, 0.04)" : "var(--color-surface-secondary)",
-                            border: agreeTos ? "1px solid rgba(0, 102, 255, 0.2)" : "1px solid transparent",
+                            background: agreeTos ? "rgba(81, 112, 255, 0.04)" : "var(--color-surface-secondary)",
+                            border: agreeTos ? "1px solid rgba(81, 112, 255, 0.2)" : "1px solid transparent",
                             cursor: "pointer",
                             transition: "all 0.2s ease",
                             textAlign: "left",
@@ -110,7 +110,7 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                                 height: "20px",
                                 borderRadius: "6px",
                                 border: agreeTos ? "none" : "2px solid var(--color-border)",
-                                background: agreeTos ? "#0066FF" : "white",
+                                background: agreeTos ? "#5170FF" : "white",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -125,7 +125,7 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                                 Terms of Service
                             </div>
                             <div style={{ fontSize: "13px", color: "var(--color-muted)" }}>
-                                I agree to the <a href="/eula" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#0066FF", textDecoration: "underline" }}>WellRead End User License Agreement</a>.
+                                I agree to the <a href="/eula" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#5170FF", textDecoration: "underline" }}>WellRead End User License Agreement</a>.
                             </div>
                         </div>
                     </label>
@@ -138,8 +138,8 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                             gap: "12px",
                             padding: "16px",
                             borderRadius: "16px",
-                            background: agreeHipaa ? "rgba(0, 102, 255, 0.04)" : "var(--color-surface-secondary)",
-                            border: agreeHipaa ? "1px solid rgba(0, 102, 255, 0.2)" : "1px solid transparent",
+                            background: agreeHipaa ? "rgba(81, 112, 255, 0.04)" : "var(--color-surface-secondary)",
+                            border: agreeHipaa ? "1px solid rgba(81, 112, 255, 0.2)" : "1px solid transparent",
                             cursor: "pointer",
                             transition: "all 0.2s ease",
                             textAlign: "left",
@@ -152,7 +152,7 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                                 height: "20px",
                                 borderRadius: "6px",
                                 border: agreeHipaa ? "none" : "2px solid var(--color-border)",
-                                background: agreeHipaa ? "#0066FF" : "white",
+                                background: agreeHipaa ? "#5170FF" : "white",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -167,7 +167,7 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                                 Medical Data Processing
                             </div>
                             <div style={{ fontSize: "13px", color: "var(--color-muted)" }}>
-                                I consent to <a href="/data-processing" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#0066FF", textDecoration: "underline" }}>automated analysis of my personal health records</a> via isolated MCP instances.
+                                I consent to <a href="/data-processing" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#5170FF", textDecoration: "underline" }}>automated analysis of my personal health records</a> via isolated MCP instances.
                             </div>
                         </div>
                     </label>
@@ -185,25 +185,25 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                         fontSize: "15px",
                         fontWeight: 600,
                         borderRadius: "14px",
-                        background: isReady ? "linear-gradient(135deg, #0066FF 0%, #3385FF 100%)" : "var(--color-surface-secondary)",
+                        background: isReady ? "linear-gradient(135deg, #5170FF 0%, #7E95FF 100%)" : "var(--color-surface-secondary)",
                         color: isReady ? "white" : "var(--color-muted)",
                         cursor: isReady ? "pointer" : "not-allowed",
                         border: "none",
                         outline: "none",
-                        boxShadow: isReady ? "0 8px 24px rgba(0, 102, 255, 0.3)" : "none",
+                        boxShadow: isReady ? "0 8px 24px rgba(81, 112, 255, 0.3)" : "none",
                         transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
                         letterSpacing: "-0.01em",
                     }}
                     onMouseEnter={(e) => {
                         if (isReady) {
                             e.currentTarget.style.transform = "translateY(-2px)";
-                            e.currentTarget.style.boxShadow = "0 12px 32px rgba(0, 102, 255, 0.4)";
+                            e.currentTarget.style.boxShadow = "0 12px 32px rgba(81, 112, 255, 0.4)";
                         }
                     }}
                     onMouseLeave={(e) => {
                         if (isReady) {
                             e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 102, 255, 0.3)";
+                            e.currentTarget.style.boxShadow = "0 8px 24px rgba(81, 112, 255, 0.3)";
                         }
                     }}
                 >

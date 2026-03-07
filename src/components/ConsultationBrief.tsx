@@ -16,7 +16,7 @@ import { usePhysicianReport, ProcessingOverlay, ReportModal } from "./PhysicianR
 
 /* ── Medical Cross Icon ── */
 
-function MedicalCross({ size = 12, color = "#5E6AD2" }: { size?: number; color?: string }) {
+function MedicalCross({ size = 12, color = "#5170FF" }: { size?: number; color?: string }) {
     return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
             <rect x="5.5" y="1" width="5" height="14" rx="1.5" fill={color} />
@@ -123,7 +123,7 @@ export default function ConsultationBrief() {
                     marginBottom: "12px",
                     borderRadius: "12px",
                     background: isConsultationMode ? "var(--color-primary-soft)" : "var(--color-surface-secondary)",
-                    border: `1px solid ${isConsultationMode ? "rgba(94, 106, 210, 0.15)" : "var(--color-border-subtle)"}`,
+                    border: `1px solid ${isConsultationMode ? "rgba(81, 112, 255, 0.15)" : "var(--color-border-subtle)"}`,
                     transition: "all 0.25s ease",
                 }}
             >
@@ -147,7 +147,7 @@ export default function ConsultationBrief() {
                         width: "44px",
                         height: "24px",
                         borderRadius: "12px",
-                        background: isConsultationMode ? "#5E6AD2" : "#E6E6E6",
+                        background: isConsultationMode ? "#5170FF" : "#E6E6E6",
                         cursor: "pointer",
                         transition: "background 0.25s ease",
                         border: "none",
@@ -331,7 +331,7 @@ export default function ConsultationBrief() {
                     onClick={report.generate}
                     className="btn-gloss w-full flex items-center justify-center gap-2"
                     style={{
-                        background: "linear-gradient(135deg, #5E6AD2 0%, #818CF8 100%)",
+                        background: "linear-gradient(135deg, #5170FF 0%, #818CF8 100%)",
                         color: "white",
                         padding: "12px 24px",
                         borderRadius: "10px",
@@ -344,7 +344,7 @@ export default function ConsultationBrief() {
                     }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.transform = "translateY(-1px)";
-                        e.currentTarget.style.boxShadow = "0 8px 20px rgba(94, 106, 210, 0.35)";
+                        e.currentTarget.style.boxShadow = "0 8px 20px rgba(81, 112, 255, 0.35)";
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.transform = "none";

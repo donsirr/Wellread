@@ -30,7 +30,7 @@ export default function PatientBadge() {
                     left: 0,
                     right: 0,
                     height: "3px",
-                    background: "linear-gradient(90deg, #5E6AD2, #818CF8, #5E6AD2)",
+                    background: "linear-gradient(90deg, #5170FF, #818CF8, #5170FF)",
                     backgroundSize: "200% 100%",
                     animation: "accent-shimmer 3s ease infinite",
                 }}
@@ -45,7 +45,7 @@ export default function PatientBadge() {
                             height: "52px",
                             borderRadius: "50%",
                             padding: "2px",
-                            background: "linear-gradient(135deg, #4CB782, #5E6AD2)",
+                            background: "linear-gradient(135deg, #4CB782, #5170FF)",
                         }}
                     >
                         <div
@@ -136,8 +136,8 @@ export default function PatientBadge() {
                                 gap: "4px",
                                 fontSize: "10px",
                                 fontWeight: 600,
-                                color: "#5E6AD2",
-                                background: "rgba(94, 106, 210, 0.08)",
+                                color: "#5170FF",
+                                background: "rgba(81, 112, 255, 0.08)",
                                 padding: "3px 8px",
                                 borderRadius: "6px",
                             }}

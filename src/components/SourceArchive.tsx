@@ -120,7 +120,7 @@ export default function SourceArchive() {
                     backgroundColor: isRunning ? "var(--color-surface-secondary)" : undefined,
                     backgroundImage: isRunning
                         ? "none"
-                        : "linear-gradient(135deg, #0066FF 0%, #3385FF 50%, #0066FF 100%)",
+                        : "linear-gradient(135deg, #5170FF 0%, #7E95FF 50%, #5170FF 100%)",
                     backgroundSize: "200% 100%",
                     color: isRunning ? "var(--color-muted)" : "white",
                     cursor: isRunning ? "default" : "pointer",
@@ -132,19 +132,19 @@ export default function SourceArchive() {
                     position: "relative",
                     overflow: "hidden",
                     transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                    boxShadow: isRunning ? "none" : "0 4px 16px rgba(0, 102, 255, 0.35)",
+                    boxShadow: isRunning ? "none" : "0 4px 16px rgba(81, 112, 255, 0.35)",
                     letterSpacing: "-0.01em",
                 }}
                 onMouseEnter={(e) => {
                     if (!isRunning) {
-                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 102, 255, 0.45)";
+                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(81, 112, 255, 0.45)";
                         e.currentTarget.style.transform = "translateY(-1px)";
                         e.currentTarget.style.filter = "brightness(1.08)";
                     }
                 }}
                 onMouseLeave={(e) => {
                     if (!isRunning) {
-                        e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 102, 255, 0.35)";
+                        e.currentTarget.style.boxShadow = "0 4px 16px rgba(81, 112, 255, 0.35)";
                         e.currentTarget.style.transform = "none";
                         e.currentTarget.style.filter = "none";
                     }
@@ -194,7 +194,7 @@ export default function SourceArchive() {
                         display: "flex",
                         alignItems: "center",
                         gap: "6px",
-                        border: "1px solid rgba(94, 106, 210, 0.1)",
+                        border: "1px solid rgba(81, 112, 255, 0.1)",
                     }}
                 >
                     <Sparkles size={10} strokeWidth={2} />
@@ -214,7 +214,7 @@ export default function SourceArchive() {
 
                 // Color defaults mapping based on iconType
                 const colorMap: Record<string, { iconColor: string, iconBg: string, inspectorType: SourceType }> = {
-                    "Mail": { iconColor: "#5E6AD2", iconBg: "rgba(94, 106, 210, 0.08)", inspectorType: "gmail" },
+                    "Mail": { iconColor: "#5170FF", iconBg: "rgba(81, 112, 255, 0.08)", inspectorType: "gmail" },
                     "FileText": { iconColor: "#EB5757", iconBg: "rgba(235, 87, 87, 0.06)", inspectorType: "pdf" },
                     "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "clinical_note" }
                 };

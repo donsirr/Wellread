@@ -46,7 +46,7 @@ function ProcessingOverlay({ progress, label }: { progress: number; label: strin
                         width: "56px",
                         height: "56px",
                         borderRadius: "16px",
-                        background: "linear-gradient(135deg, #5E6AD2, #818CF8)",
+                        background: "linear-gradient(135deg, #5170FF, #818CF8)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -79,7 +79,7 @@ function ProcessingOverlay({ progress, label }: { progress: number; label: strin
                             width: `${progress}%`,
                             height: "100%",
                             borderRadius: "2px",
-                            background: "linear-gradient(90deg, #5E6AD2, #818CF8)",
+                            background: "linear-gradient(90deg, #5170FF, #818CF8)",
                             transition: "width 0.3s ease-out",
                         }}
                     />
@@ -91,8 +91,8 @@ function ProcessingOverlay({ progress, label }: { progress: number; label: strin
 
             <style>{`
                 @keyframes pulse-icon {
-                    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(94, 106, 210, 0.4); }
-                    50% { transform: scale(1.05); box-shadow: 0 0 20px 6px rgba(94, 106, 210, 0.15); }
+                    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(81, 112, 255, 0.4); }
+                    50% { transform: scale(1.05); box-shadow: 0 0 20px 6px rgba(81, 112, 255, 0.15); }
                 }
             `}</style>
         </div>
@@ -283,7 +283,7 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                     }}
                 >
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileOutput size={16} strokeWidth={1.5} color="#5E6AD2" />
+                        <FileOutput size={16} strokeWidth={1.5} color="#5170FF" />
                         <span style={{ fontSize: "13px", fontWeight: 600, color: "#1B1B1B" }}>
                             Physician Report
                         </span>
@@ -389,7 +389,7 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                     <div style={{ height: "1px", background: "#EDEDF0", margin: "0 0 28px" }} />
 
                     {/* S.O.A.P. Sections */}
-                    <SOAPSection label="Subjective" letterColor="#5E6AD2">
+                    <SOAPSection label="Subjective" letterColor="#5170FF">
                         <p>
                             Patient reports persistent blurred vision and foot tingling,
                             specifically bilateral numbness and tingling in the toes. Symptoms
@@ -562,7 +562,7 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                             fontSize: "12px",
                             fontWeight: 600,
                             color: "white",
-                            background: "linear-gradient(135deg, #5E6AD2 0%, #818CF8 100%)",
+                            background: "linear-gradient(135deg, #5170FF 0%, #818CF8 100%)",
                             border: "none",
                             padding: "8px 20px",
                             borderRadius: "8px",
@@ -571,15 +571,15 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                             alignItems: "center",
                             gap: "6px",
                             transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-                            boxShadow: "0 2px 8px rgba(94, 106, 210, 0.3)",
+                            boxShadow: "0 2px 8px rgba(81, 112, 255, 0.3)",
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = "translateY(-1px)";
-                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(94, 106, 210, 0.4)";
+                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(81, 112, 255, 0.4)";
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = "none";
-                            e.currentTarget.style.boxShadow = "0 2px 8px rgba(94, 106, 210, 0.3)";
+                            e.currentTarget.style.boxShadow = "0 2px 8px rgba(81, 112, 255, 0.3)";
                         }}
                     >
                         <Send size={13} strokeWidth={1.5} />

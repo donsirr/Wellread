@@ -98,10 +98,10 @@ export default function CorrelationLines() {
             <motion.path
                 d={pathD}
                 fill="none"
-                stroke="#5E6AD2"
+                stroke="#5170FF"
                 strokeWidth={2.5}
                 style={{
-                    filter: "drop-shadow(0 0 6px rgba(94, 106, 210, 0.6))"
+                    filter: "drop-shadow(0 0 6px rgba(81, 112, 255, 0.6))"
                 }}
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
@@ -122,19 +122,19 @@ export default function CorrelationLines() {
                     opacity: { duration: 1.0, delay: 0.5 }
                 }}
                 style={{
-                    filter: "drop-shadow(0 0 10px rgba(94, 106, 210, 0.9))"
+                    filter: "drop-shadow(0 0 10px rgba(81, 112, 255, 0.9))"
                 }}
             />
 
             {/* Origin Dot */}
             <motion.circle
-                cx={x1} cy={y1} r={5} fill="#5E6AD2"
+                cx={x1} cy={y1} r={5} fill="#5170FF"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.1 }}
             />
             <motion.circle
-                cx={x1} cy={y1} r={10} fill="rgba(94, 106, 210, 0.3)"
+                cx={x1} cy={y1} r={10} fill="rgba(81, 112, 255, 0.3)"
                 initial={{ scale: 0 }}
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ delay: 0.1, duration: 2, repeat: Infinity }}
@@ -142,13 +142,13 @@ export default function CorrelationLines() {
 
             {/* Target Dot */}
             <motion.circle
-                cx={x2} cy={y2} r={5} fill="#5E6AD2"
+                cx={x2} cy={y2} r={5} fill="#5170FF"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.9 }} // Waits for line to trace
             />
             <motion.circle
-                cx={x2} cy={y2} r={10} fill="rgba(94, 106, 210, 0.3)"
+                cx={x2} cy={y2} r={10} fill="rgba(81, 112, 255, 0.3)"
                 initial={{ scale: 0 }}
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ delay: 0.9, duration: 2, repeat: Infinity }}

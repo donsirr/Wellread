@@ -5,7 +5,7 @@ export default function EULAPage() {
         <div style={{ height: "100vh", overflowY: "auto", overflowX: "hidden", backgroundColor: "var(--color-background)" }}>
             <div style={{ padding: "40px 20px", maxWidth: "720px", margin: "0 auto", color: "var(--color-foreground)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
-                    <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "linear-gradient(135deg, #0066FF 0%, #3385FF 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "linear-gradient(135deg, #5170FF 0%, #7E95FF 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                         <ShieldCheck size={20} color="white" />
                     </div>
                     <h1 style={{ fontSize: "26px", fontWeight: 700, letterSpacing: "-0.02em" }}>WellRead End User License Agreement</h1>
