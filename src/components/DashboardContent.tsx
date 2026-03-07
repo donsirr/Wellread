@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import VitalityGrid from "./VitalityGrid";
 import NarrativeIntelligence from "./NarrativeIntelligence";
@@ -120,18 +121,20 @@ function BriefSkeleton() {
 
 export default function DashboardContent() {
     const { state } = useStore();
+    const [showLanding, setShowLanding] = useState(true);
+
     return (
         <>
             <AnimatePresence>
-                {state.currentStep === 0 && <AppHero />}
+                {showLanding && <AppHero onDismiss={() => setShowLanding(false)} />}
             </AnimatePresence>
 
             <div
                 className="app-shell"
                 style={{
-                    filter: state.currentStep === 0 ? "blur(8px)" : "none",
-                    opacity: state.currentStep === 0 ? 0.6 : 1,
-                    pointerEvents: state.currentStep === 0 ? "none" : "auto",
+                    filter: showLanding ? "blur(8px)" : "none",
+                    opacity: showLanding ? 0.6 : 1,
+                    pointerEvents: showLanding ? "none" : "auto",
                     transition: "filter 0.5s ease, opacity 0.5s ease"
                 }}
             >

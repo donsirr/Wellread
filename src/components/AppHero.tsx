@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import { ShieldCheck, FileText, Check } from "lucide-react";
 import { useStore } from "./StoreContext";
 
-export default function AppHero() {
-    const { startAutoDemo } = useStore();
+export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
     const [agreeTos, setAgreeTos] = useState(false);
     const [agreeHipaa, setAgreeHipaa] = useState(false);
 
@@ -177,7 +176,7 @@ export default function AppHero() {
                 {/* CTA Button */}
                 <button
                     onClick={() => {
-                        if (isReady) startAutoDemo();
+                        if (isReady) onDismiss();
                     }}
                     disabled={!isReady}
                     style={{
