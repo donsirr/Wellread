@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {
     TrendingUp,
     Check,
@@ -359,13 +360,15 @@ export default function ConsultationBrief() {
                 </p>
             </div>
 
-            {/* Report Processing + Modal */}
-            {report.phase === "processing" && (
-                <ProcessingOverlay progress={report.progress} label={report.label} />
+            {/* Report Processing + Modal — portaled to body to escape parent transforms */}
+            {typeof document !== "undefined" && report.phase === "processing" && createPortal(
+                <ProcessingOverlay progress={report.progress} label={report.label} />,
+                document.body
             )}
-            {report.phase === "ready" && (
-                <ReportModal onClose={report.close} />
+            {typeof document !== "undefined" && report.phase === "ready" && createPortal(
+                <ReportModal onClose={report.close} />,
+                document.body
             )}
-        </section >
+        </section>
     );
 }
