@@ -103,6 +103,7 @@ export default function AppHero() {
                             transition: "all 0.2s ease",
                             textAlign: "left",
                         }}
+                        onClick={() => setAgreeTos(!agreeTos)}
                     >
                         <div
                             style={{
@@ -117,7 +118,6 @@ export default function AppHero() {
                                 flexShrink: 0,
                                 marginTop: "2px",
                             }}
-                            onClick={() => setAgreeTos(!agreeTos)}
                         >
                             {agreeTos && <Check size={14} color="white" strokeWidth={3} />}
                         </div>
@@ -126,7 +126,7 @@ export default function AppHero() {
                                 Terms of Service
                             </div>
                             <div style={{ fontSize: "13px", color: "var(--color-muted)" }}>
-                                I agree to the WellRead End User License Agreement.
+                                I agree to the <a href="/eula" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#0066FF", textDecoration: "underline" }}>WellRead End User License Agreement</a>.
                             </div>
                         </div>
                     </label>
@@ -145,6 +145,7 @@ export default function AppHero() {
                             transition: "all 0.2s ease",
                             textAlign: "left",
                         }}
+                        onClick={() => setAgreeHipaa(!agreeHipaa)}
                     >
                         <div
                             style={{
@@ -159,7 +160,6 @@ export default function AppHero() {
                                 flexShrink: 0,
                                 marginTop: "2px",
                             }}
-                            onClick={() => setAgreeHipaa(!agreeHipaa)}
                         >
                             {agreeHipaa && <Check size={14} color="white" strokeWidth={3} />}
                         </div>
@@ -168,7 +168,7 @@ export default function AppHero() {
                                 Medical Data Processing
                             </div>
                             <div style={{ fontSize: "13px", color: "var(--color-muted)" }}>
-                                I consent to automated analysis of my personal health records via isolated MCP instances.
+                                I consent to <a href="/data-processing" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#0066FF", textDecoration: "underline" }}>automated analysis of my personal health records</a> via isolated MCP instances.
                             </div>
                         </div>
                     </label>
