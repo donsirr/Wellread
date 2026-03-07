@@ -44,6 +44,8 @@
             "label": "HbA1c",
             "value": "8.6",
             "unit": "%",
+            "isAlert": true,
+            "alertBadge": "+0.7% in 6mo",
             "sparkData": [
                 7.1,
                 7.3,
@@ -70,6 +72,38 @@
                 135
             ],
             "iconType": "Gauge"
+        },
+        {
+            "id": "metric-hr",
+            "label": "Heart Rate",
+            "value": "82",
+            "unit": "bpm",
+            "sparkData": [
+                68,
+                72,
+                70,
+                74,
+                75,
+                78,
+                82
+            ],
+            "iconType": "Heart"
+        },
+        {
+            "id": "metric-rr",
+            "label": "Respiratory Rate",
+            "value": "18",
+            "unit": "breaths/min",
+            "sparkData": [
+                16,
+                16,
+                15,
+                17,
+                17,
+                18,
+                18
+            ],
+            "iconType": "Wind"
         }
     ],
     "correlations": [
