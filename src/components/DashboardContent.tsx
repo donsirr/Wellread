@@ -9,7 +9,112 @@ import SemanticSearch from "./SemanticSearch";
 import DemoController from "./DemoController";
 import CorrelationLines from "./CorrelationLines";
 import PatientBadge from "./PatientBadge";
+import TimeMachine from "./TimeMachine";
 import { useStore } from "./StoreContext";
+
+/* ── Right Panel Skeleton ── */
+
+function BriefSkeleton() {
+    return (
+        <div style={{ padding: "20px 16px" }}>
+            {/* Header skeleton */}
+            <div className="flex items-center justify-between" style={{ marginBottom: "20px" }}>
+                <div style={{ width: "120px", height: "14px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+                <div style={{ width: "40px", height: "14px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+            </div>
+
+            {/* Toggle bar skeleton */}
+            <div style={{
+                padding: "10px 14px",
+                borderRadius: "10px",
+                background: "var(--color-surface-secondary)",
+                marginBottom: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+            }}>
+                <div style={{ width: "100px", height: "10px", borderRadius: "4px", background: "var(--color-border)" }} />
+                <div style={{ width: "36px", height: "18px", borderRadius: "9px", background: "var(--color-border)" }} />
+            </div>
+
+            {/* Card skeleton */}
+            <div className="card" style={{ padding: "20px", marginBottom: "12px", position: "relative", overflow: "hidden" }}>
+                <div style={{ width: "100%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "10px" }} />
+                <div style={{ width: "80%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "10px" }} />
+                <div style={{ width: "65%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+
+                {/* shimmer */}
+                <div style={{
+                    position: "absolute", inset: 0,
+                    backgroundImage: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+                    backgroundSize: "200% 100%",
+                    animation: "brief-skel-shimmer 1.8s ease-in-out infinite",
+                }} />
+            </div>
+
+            {/* Section heading */}
+            <div style={{ width: "130px", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", margin: "20px 0 12px" }} />
+
+            {/* Observation list skeleton */}
+            {[0, 1, 2].map(i => (
+                <div key={i} className="card" style={{ padding: "14px 16px", marginBottom: "8px", position: "relative", overflow: "hidden" }}>
+                    <div className="flex items-start gap-2">
+                        <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "var(--color-surface-secondary)", flexShrink: 0, marginTop: "2px" }} />
+                        <div style={{ flex: 1 }}>
+                            <div style={{ width: `${85 - i * 15}%`, height: "9px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "6px" }} />
+                            <div style={{ width: `${60 - i * 10}%`, height: "9px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+                        </div>
+                    </div>
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        backgroundImage: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+                        backgroundSize: "200% 100%",
+                        animation: `brief-skel-shimmer 1.8s ease-in-out infinite ${i * 0.15}s`,
+                    }} />
+                </div>
+            ))}
+
+            {/* AI flag skeleton */}
+            <div style={{
+                padding: "14px 16px",
+                borderRadius: "10px",
+                border: "1px dashed var(--color-border)",
+                marginTop: "12px",
+            }}>
+                <div style={{ width: "90%", height: "9px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "8px" }} />
+                <div style={{ width: "70%", height: "9px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+            </div>
+
+            {/* Questions skeleton */}
+            <div style={{ width: "80px", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", margin: "20px 0 12px" }} />
+            {[0, 1, 2].map(i => (
+                <div key={i} style={{
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    background: "var(--color-surface-secondary)",
+                    marginBottom: "8px",
+                    height: "36px",
+                }} />
+            ))}
+
+            {/* CTA button skeleton */}
+            <div style={{
+                width: "100%",
+                height: "44px",
+                borderRadius: "10px",
+                background: "var(--color-surface-secondary)",
+                marginTop: "16px",
+            }} />
+
+            <style>{`
+                @keyframes brief-skel-shimmer {
+                    0% { background-position: 200% 0; }
+                    100% { background-position: -200% 0; }
+                }
+            `}</style>
+        </div>
+    );
+}
 
 export default function DashboardContent() {
     const { state } = useStore();
@@ -50,7 +155,7 @@ export default function DashboardContent() {
 
             {/* ── Center Panel — Intelligence Feed ── */}
             <section className="panel panel-center relative z-20">
-                <div style={{ padding: "28px 32px", maxWidth: "960px" }}>
+                <div style={{ padding: "28px 32px" }}>
                     {/* Semantic Search Bar */}
                     <SemanticSearch />
 
@@ -83,6 +188,9 @@ export default function DashboardContent() {
 
                     {/* Narrative Intelligence */}
                     <NarrativeIntelligence />
+
+                    {/* Medical Time-Machine — show after metrics are visible */}
+                    {state.currentStep >= 2 && <TimeMachine />}
                 </div>
             </section>
 
@@ -90,17 +198,23 @@ export default function DashboardContent() {
             <aside
                 className="panel panel-right"
                 style={{
-                    width: state.showBrief ? "400px" : "0px",
-                    minWidth: state.showBrief ? "400px" : "0px",
-                    opacity: state.showBrief ? 1 : 0,
-                    overflow: "hidden",
-                    transition: "width 0.5s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
-                    borderLeft: state.showBrief ? "1px solid var(--color-border)" : "none",
+                    width: "400px",
+                    minWidth: "400px",
+                    borderLeft: "1px solid var(--color-border)",
                 }}
             >
-                <div style={{ padding: "20px 16px", minWidth: "400px" }}>
-                    <ConsultationBrief />
-                </div>
+                {state.showBrief ? (
+                    <div
+                        style={{
+                            padding: "20px 16px",
+                            animation: "brief-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
+                        }}
+                    >
+                        <ConsultationBrief />
+                    </div>
+                ) : (
+                    <BriefSkeleton />
+                )}
             </aside>
 
             {/* Glowing magic correlation lines */}
@@ -108,6 +222,13 @@ export default function DashboardContent() {
 
             {/* Hidden Demo Controller (Ctrl+D to toggle) */}
             <DemoController />
+
+            <style>{`
+                @keyframes brief-reveal {
+                    from { opacity: 0; transform: translateY(12px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </div>
     );
 }
