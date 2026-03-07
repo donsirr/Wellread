@@ -18,7 +18,7 @@ function AppContent() {
         {isConsultationMode ? (
           <ConsultationView key="consultation" />
         ) : (
-          <div key="dashboard" style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+          <div key="dashboard" style={{ display: "flex", height: "100vh", overflow: "hidden", width: "100%" }}>
             <Sidebar />
             <DashboardContent />
           </div>

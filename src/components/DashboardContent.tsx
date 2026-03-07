@@ -87,8 +87,18 @@ export default function DashboardContent() {
             </section>
 
             {/* ── Right Panel — Consultation Brief ── */}
-            <aside className="panel panel-right">
-                <div style={{ padding: "20px 16px" }}>
+            <aside
+                className="panel panel-right"
+                style={{
+                    width: state.showBrief ? "400px" : "0px",
+                    minWidth: state.showBrief ? "400px" : "0px",
+                    opacity: state.showBrief ? 1 : 0,
+                    overflow: "hidden",
+                    transition: "width 0.5s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+                    borderLeft: state.showBrief ? "1px solid var(--color-border)" : "none",
+                }}
+            >
+                <div style={{ padding: "20px 16px", minWidth: "400px" }}>
                     <ConsultationBrief />
                 </div>
             </aside>

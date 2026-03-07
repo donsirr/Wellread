@@ -90,19 +90,123 @@ function FlowConnectors() {
     );
 }
 
+/* ── Narrative Skeleton ── */
+
+function NarrativeSkeleton({ isPulsing }: { isPulsing: boolean }) {
+    return (
+        <section id="narrative-intelligence">
+            <div className="section-header">
+                <Zap size={12} strokeWidth={2} style={{ color: "var(--color-muted)" }} />
+                <span className="section-title" style={{ color: "var(--color-muted)" }}>
+                    Narrative Intelligence · {isPulsing ? "Processing..." : "Awaiting Data"}
+                </span>
+            </div>
+
+            <div
+                className="card"
+                style={{
+                    padding: "28px",
+                    overflow: "hidden",
+                    position: "relative",
+                    animation: isPulsing ? "narr-skel-pulse 1.5s ease-in-out infinite" : undefined,
+                }}
+            >
+                <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+                    {/* Source Bubble skeletons */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "24px", flexShrink: 0 }}>
+                        {[0, 1].map((i) => (
+                            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
+                                <div style={{
+                                    width: "44px",
+                                    height: "44px",
+                                    borderRadius: "10px",
+                                    background: "var(--color-surface-secondary)",
+                                }} />
+                                <div style={{
+                                    width: "32px",
+                                    height: "8px",
+                                    borderRadius: "4px",
+                                    background: "var(--color-surface-secondary)",
+                                }} />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Connector skeleton */}
+                    <div style={{
+                        width: "100px",
+                        height: "80px",
+                        flexShrink: 0,
+                    }} />
+
+                    {/* Text area skeleton */}
+                    <div style={{ flex: 1 }}>
+                        <div style={{ width: "140px", height: "12px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "14px" }} />
+                        <div style={{ width: "100%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "8px" }} />
+                        <div style={{ width: "90%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)", marginBottom: "8px" }} />
+                        <div style={{ width: "75%", height: "10px", borderRadius: "4px", background: "var(--color-surface-secondary)" }} />
+                        <div style={{ width: "100px", height: "28px", borderRadius: "6px", background: "var(--color-surface-secondary)", marginTop: "16px" }} />
+                    </div>
+
+                    {/* Ring skeleton */}
+                    <div style={{
+                        width: "80px",
+                        height: "80px",
+                        borderRadius: "50%",
+                        border: "6px solid var(--color-surface-secondary)",
+                        flexShrink: 0,
+                    }} />
+                </div>
+
+                {/* Shimmer overlay */}
+                <div style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+                    backgroundSize: "200% 100%",
+                    animation: "narr-skel-shimmer 1.5s ease-in-out infinite",
+                }} />
+            </div>
+
+            <style>{`
+                @keyframes narr-skel-pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.55; }
+                }
+                @keyframes narr-skel-shimmer {
+                    0% { background-position: 200% 0; }
+                    100% { background-position: -200% 0; }
+                }
+            `}</style>
+        </section>
+    );
+}
+
 /* ── NarrativeIntelligence ── */
 
 export default function NarrativeIntelligence() {
     const { openInspector } = useInspector();
     const { state } = useStore();
     const [isLoading, setIsLoading] = useState(false);
+    const step = state.currentStep;
 
     if (!state.narrative) {
         return null;
     }
 
+    // Steps 0–2: show skeleton
+    if (step < 3) {
+        return <NarrativeSkeleton isPulsing={step >= 1} />;
+    }
+
+    // Step 3+: show real content with entrance animation
     return (
-        <section id="narrative-intelligence">
+        <section
+            id="narrative-intelligence"
+            style={{
+                animation: "narr-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+            }}
+        >
             <div className="section-header">
                 <Zap size={12} strokeWidth={2} style={{ color: "var(--color-primary)" }} />
                 <span className="section-title">Narrative Intelligence</span>
@@ -209,6 +313,14 @@ export default function NarrativeIntelligence() {
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                @keyframes narr-enter {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </section>
     );
 }
+
