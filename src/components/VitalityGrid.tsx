@@ -122,19 +122,20 @@ function Sparkline({
                 <div
                     style={{
                         position: "absolute",
-                        right: -10,
-                        top: -24,
+                        right: "4px",
+                        top: "-20px",
                         background: "var(--color-success)",
                         color: "white",
                         fontSize: "9px",
-                        fontWeight: 600,
-                        padding: "4px 8px",
+                        fontWeight: 700,
+                        padding: "3px 8px",
                         borderRadius: "12px",
                         boxShadow: "0 4px 12px rgba(39, 174, 96, 0.2)",
                         whiteSpace: "nowrap",
                         animation: "spring-up 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
                         opacity: 0,
-                        transform: "translateY(10px)"
+                        transform: "translateY(10px)",
+                        zIndex: 10
                     }}
                 >
                     With Medication Adj: 6.5% Est.
@@ -324,10 +325,8 @@ export default function VitalityGrid() {
                 )}
             </div>
 
-            {/* 4-Card Row */}
             <div
-                className="grid gap-3"
-                style={{ gridTemplateColumns: "repeat(4, 1fr)" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
             >
                 {!showData ? (
                     /* Skeleton cards */
@@ -441,7 +440,7 @@ export default function VitalityGrid() {
                     to { opacity: 1; }
                 }
             `}</style>
-        </section>
+        </section >
     );
 }
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, FileText, Check } from "lucide-react";
+import { FileText, Check } from "lucide-react";
 import { useStore } from "./StoreContext";
 
 export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
@@ -50,16 +50,17 @@ export default function AppHero({ onDismiss }: { onDismiss: () => void }) {
                     style={{
                         width: "64px",
                         height: "64px",
-                        borderRadius: "18px",
-                        background: "linear-gradient(135deg, #5170FF 0%, #7E95FF 100%)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: "24px",
-                        boxShadow: "0 8px 24px rgba(81, 112, 255, 0.3)",
                     }}
                 >
-                    <ShieldCheck size={32} color="white" strokeWidth={2.5} />
+                    <img
+                        src="/favicon/favicon.svg"
+                        alt="WellRead Logo"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
                 </div>
 
                 {/* Typography */}

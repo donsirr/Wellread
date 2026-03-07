@@ -213,7 +213,7 @@ export default function NarrativeIntelligence() {
             </div>
 
             <div className="card" style={{ padding: "28px", overflow: "hidden" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0" }}>
+                <div className="flex flex-col md:flex-row items-center gap-6 md:gap-0">
                     {/* Source Bubbles */}
                     <div className="flex flex-col items-center" style={{ gap: "24px", flexShrink: 0 }}>
                         <SourceBubble icon={Mail} label="Gmail" color="#5170FF" bgColor="var(--color-primary-soft)" />
