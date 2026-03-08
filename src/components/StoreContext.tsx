@@ -3,25 +3,27 @@
 import React, { createContext, useContext, useState, useRef, ReactNode } from "react";
 import initialState from "../state.json";
 
-export type PatientProfile = typeof initialState.patientProfile;
-export type McpSource = typeof initialState.mcpSources[0];
-export type ClinicalMetric = typeof initialState.clinicalMetrics[0];
-export type Correlation = typeof initialState.correlations[0];
-export type Narrative = typeof initialState.narrative;
-export type Consultation = typeof initialState.consultation;
+type _PatientType = (typeof initialState.patientDatabase)[0];
+export type PatientProfile = _PatientType["patientProfile"];
+export type McpSource = NonNullable<_PatientType["mcpSources"]>[0];
+export type ClinicalMetric = NonNullable<_PatientType["clinicalMetrics"]>[0];
+export type Correlation = NonNullable<_PatientType["correlations"]>[0];
+export type Narrative = NonNullable<_PatientType["narrative"]>;
+export type Consultation = NonNullable<_PatientType["consultation"]>;
 
 export interface StoreState {
     patientProfile: PatientProfile;
     mcpSources: McpSource[];
     clinicalMetrics: ClinicalMetric[];
     correlations: Correlation[];
-    narrative: Narrative;
-    consultation: Consultation;
+    narrative: Narrative | null;
+    consultation: Consultation | null;
     activeCorrelationId: string | null;
     healthGaps: string[];
     isCorrelated: boolean;
     showBrief: boolean;
     currentStep: number;
+    activeHighlightCard: string | null;
 }
 
 interface StoreContextValue {
@@ -34,17 +36,28 @@ interface StoreContextValue {
     startAutoDemo: () => void;
     jumpToStep: (step: number) => void;
     resetDemo: () => void;
+    switchPatient: (name: string) => void;
+    setHighlightCard: (id: string | null) => void;
 }
 
 const StoreContext = createContext<StoreContextValue | undefined>(undefined);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+    const firstPatient = initialState.patientDatabase[0];
+
     const [state, setState] = useState<StoreState>({
-        ...initialState,
+        patientProfile: firstPatient.patientProfile,
+        mcpSources: firstPatient.mcpSources,
+        clinicalMetrics: firstPatient.clinicalMetrics,
+        correlations: firstPatient.correlations,
+        narrative: firstPatient.narrative,
+        consultation: firstPatient.consultation,
+        healthGaps: firstPatient.healthGaps,
         activeCorrelationId: null,
         isCorrelated: false,
         showBrief: false, // Hidden by default for the demo flow
         currentStep: 0,
+        activeHighlightCard: null,
     });
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -82,8 +95,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
                 nextState.mcpSources = nextState.mcpSources.map(s =>
                     s.id === "src-lab-pdf" || s.id === "src-calendar" ? { ...s, status: "analyzed" } : s
                 );
+
+                // Get base metrics for the active patient
+                const patientBase = initialState.patientDatabase.find(p => p.patientProfile.name === prev.patientProfile.name);
+
                 nextState.clinicalMetrics = nextState.clinicalMetrics.map(m =>
-                    m.id === "metric-hba1c" ? { ...m, value: initialState.clinicalMetrics.find(x => x.id === "metric-hba1c")?.value || "8.6" } : m
+                    m.id === "metric-hba1c" ? { ...m, value: patientBase?.clinicalMetrics.find(x => x.id === "metric-hba1c")?.value || "8.6" } : m
                 );
             }
 
@@ -145,6 +162,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setState(updater);
     };
 
+    const switchPatient = (name: string) => {
+        const patient = initialState.patientDatabase.find(p => p.patientProfile.name.toLowerCase().includes(name.toLowerCase()));
+        if (patient) {
+            setState(prev => ({
+                ...prev,
+                patientProfile: patient.patientProfile,
+                mcpSources: patient.mcpSources,
+                clinicalMetrics: patient.clinicalMetrics,
+                correlations: patient.correlations,
+                narrative: patient.narrative,
+                consultation: patient.consultation,
+                healthGaps: patient.healthGaps,
+                activeCorrelationId: null,
+                isCorrelated: false,
+                showBrief: false,
+                currentStep: 0,
+                activeHighlightCard: null,
+            }));
+        }
+    };
+
+    const setHighlightCard = (id: string | null) => {
+        setState(prev => ({ ...prev, activeHighlightCard: id }));
+    };
+
     const updateMetric = (id: string, newValue: string) => {
         setState(prev => ({
             ...prev,
@@ -169,7 +211,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return (
         <StoreContext.Provider value={{
             state, setActiveCorrelation, isCorrelationActive, updateState, updateMetric, triggerCorrelation,
-            startAutoDemo, jumpToStep, resetDemo
+            startAutoDemo, jumpToStep, resetDemo, switchPatient, setHighlightCard
         }}>
             {children}
         </StoreContext.Provider>

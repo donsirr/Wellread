@@ -335,90 +335,96 @@ export default function VitalityGrid() {
                     ))
                 ) : (
                     /* Real metric cards with staggered reveal */
-                    vitals.map((m: any, i: number) => (
-                        <div
-                            key={m.id}
-                            id={m.id}
-                            className={`card card-glow ${m.isAlert ? "clinical-alert" : ""}`}
-                            style={{
-                                padding: "16px",
-                                position: "relative",
-                                animation: `stage-card-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s both`,
-                            }}
-                        >
-                            <div style={{ position: "relative", zIndex: 1 }}>
-                                {/* Top row */}
-                                <div className="flex items-start justify-between">
-                                    <div
-                                        className="flex items-center justify-center"
-                                        style={{
-                                            width: "32px",
-                                            height: "32px",
-                                            borderRadius: "8px",
-                                            background: m.isAlert
-                                                ? "var(--color-danger-soft)"
-                                                : "var(--color-primary-soft)",
-                                        }}
-                                    >
-                                        <m.icon
-                                            size={16}
-                                            strokeWidth={1.5}
+                    vitals.map((m: any, i: number) => {
+                        const isHighlighted = state.activeHighlightCard === m.id;
+                        return (
+                            <div
+                                key={m.id}
+                                id={m.id}
+                                className={`card card-glow ${m.isAlert ? "clinical-alert" : ""}`}
+                                style={{
+                                    padding: "16px",
+                                    position: "relative",
+                                    animation: `stage-card-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s both`,
+                                    boxShadow: isHighlighted ? "0 0 0 3px var(--color-primary), 0 8px 24px rgba(81, 112, 255, 0.3)" : undefined,
+                                    transform: isHighlighted ? "translateY(-4px)" : undefined,
+                                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                                }}
+                            >
+                                <div style={{ position: "relative", zIndex: 1 }}>
+                                    {/* Top row */}
+                                    <div className="flex items-start justify-between">
+                                        <div
+                                            className="flex items-center justify-center"
                                             style={{
-                                                color: m.isAlert
-                                                    ? "var(--color-danger)"
-                                                    : "var(--color-primary)",
+                                                width: "32px",
+                                                height: "32px",
+                                                borderRadius: "8px",
+                                                background: m.isAlert
+                                                    ? "var(--color-danger-soft)"
+                                                    : "var(--color-primary-soft)",
                                             }}
+                                        >
+                                            <m.icon
+                                                size={16}
+                                                strokeWidth={1.5}
+                                                style={{
+                                                    color: m.isAlert
+                                                        ? "var(--color-danger)"
+                                                        : "var(--color-primary)",
+                                                }}
+                                            />
+                                        </div>
+                                        {m.alertBadge && (
+                                            <span className="badge badge-danger" style={{ fontSize: "10px" }}>
+                                                {m.alertBadge}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Label */}
+                                    <p
+                                        className="text-muted"
+                                        style={{ fontSize: "11px", fontWeight: 500, marginTop: "12px" }}
+                                    >
+                                        {m.label}
+                                    </p>
+
+                                    {/* Value */}
+                                    <div className="flex items-baseline gap-1 mt-0.5">
+                                        <span
+                                            className="text-foreground"
+                                            style={{
+                                                fontSize: m.isAlert ? "26px" : "24px",
+                                                fontWeight: m.isAlert ? 400 : 600,
+                                                lineHeight: 1,
+                                                letterSpacing: "-0.03em",
+                                            }}
+                                        >
+                                            {m.value}
+                                        </span>
+                                        <span className="text-muted" style={{ fontSize: "11px" }}>
+                                            {m.unit}
+                                        </span>
+                                    </div>
+
+                                    <p className="text-muted" style={{ fontSize: "10px", marginTop: "2px" }}>
+                                        {m.subLabel}
+                                    </p>
+
+                                    {/* Chart well */}
+                                    <div className="chart-well mt-3" style={{ padding: "6px 4px 2px 4px" }}>
+                                        <Sparkline
+                                            data={m.sparkData}
+                                            gradientId={m.id}
+                                            alert={m.isAlert}
+                                            showProjection={m.id === "metric-hba1c" ? showProjection : false}
                                         />
                                     </div>
-                                    {m.alertBadge && (
-                                        <span className="badge badge-danger" style={{ fontSize: "10px" }}>
-                                            {m.alertBadge}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Label */}
-                                <p
-                                    className="text-muted"
-                                    style={{ fontSize: "11px", fontWeight: 500, marginTop: "12px" }}
-                                >
-                                    {m.label}
-                                </p>
-
-                                {/* Value */}
-                                <div className="flex items-baseline gap-1 mt-0.5">
-                                    <span
-                                        className="text-foreground"
-                                        style={{
-                                            fontSize: m.isAlert ? "26px" : "24px",
-                                            fontWeight: m.isAlert ? 400 : 600,
-                                            lineHeight: 1,
-                                            letterSpacing: "-0.03em",
-                                        }}
-                                    >
-                                        {m.value}
-                                    </span>
-                                    <span className="text-muted" style={{ fontSize: "11px" }}>
-                                        {m.unit}
-                                    </span>
-                                </div>
-
-                                <p className="text-muted" style={{ fontSize: "10px", marginTop: "2px" }}>
-                                    {m.subLabel}
-                                </p>
-
-                                {/* Chart well */}
-                                <div className="chart-well mt-3" style={{ padding: "6px 4px 2px 4px" }}>
-                                    <Sparkline
-                                        data={m.sparkData}
-                                        gradientId={m.id}
-                                        alert={m.isAlert}
-                                        showProjection={m.id === "metric-hba1c" ? showProjection : false}
-                                    />
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
 

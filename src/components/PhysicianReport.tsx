@@ -447,7 +447,7 @@ function ReportModal({ onClose }: { onClose: () => void }) {
                             recommends glycemic volatility screening.
                         </p>
                         <p style={{ marginTop: "8px", fontSize: "11px", color: "#999", fontStyle: "italic" }}>
-                            AI Confidence: {state.narrative.confidence}% · Cross-referenced 2 sources · 14 data points
+                            AI Confidence: {state.narrative?.confidence || 0}% · Cross-referenced 2 sources · 14 data points
                         </p>
                     </SOAPSection>
 

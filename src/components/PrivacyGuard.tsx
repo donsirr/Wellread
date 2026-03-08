@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ShieldCheck, Mail, HardDrive, Lock } from "lucide-react";
+import { ShieldCheck, Mail, HardDrive, Lock, Cloud } from "lucide-react";
+import { useStore } from "./StoreContext";
 
 /* ─────────────────────────────────────────────────────────────
    Privacy Guard — MCP Security Indicator
@@ -19,6 +20,9 @@ type Phase = "idle" | "handshake" | "glow" | "ready";
 export default function PrivacyGuard() {
     const [phase, setPhase] = useState<Phase>("idle");
     const [hovered, setHovered] = useState(false);
+    const { state } = useStore();
+
+    const isLocalOnly = state.mcpSources.some(s => s.privacyStatus === 'local_only');
 
     /* ── Boot sequence ── */
     useEffect(() => {
@@ -51,7 +55,11 @@ export default function PrivacyGuard() {
             {/* Security Toast (expands on hover) */}
             <div className={`privacy-toast flex items-center gap-2 ${hovered ? "expanded" : ""}`}>
                 <div className="flex items-center gap-1.5">
-                    <Lock size={11} strokeWidth={2} style={{ color: "var(--color-success)" }} />
+                    {isLocalOnly ? (
+                        <Lock size={11} strokeWidth={2} style={{ color: "var(--color-success)" }} />
+                    ) : (
+                        <Cloud size={11} strokeWidth={2} style={{ color: "var(--color-primary)" }} />
+                    )}
                     <span
                         style={{
                             fontSize: "11px",
@@ -60,7 +68,7 @@ export default function PrivacyGuard() {
                             letterSpacing: "-0.01em",
                         }}
                     >
-                        Local-First Processing Active
+                        {isLocalOnly ? "Local-First Processing Active" : "Cloud Processing Active"}
                     </span>
                 </div>
                 <span
@@ -71,7 +79,7 @@ export default function PrivacyGuard() {
                         paddingLeft: "8px",
                     }}
                 >
-                    via MCP · data stays on-device
+                    {isLocalOnly ? "via MCP · data stays on-device" : "via Secure Cloud · E2E Encrypted"}
                 </span>
             </div>
 
@@ -127,8 +135,8 @@ export default function PrivacyGuard() {
                         height: "36px",
                         borderRadius: "10px",
                         border: `1.5px solid ${isGlowing || isReady
-                                ? "var(--color-success)"
-                                : "var(--color-border)"
+                            ? "var(--color-success)"
+                            : "var(--color-border)"
                             }`,
                         background:
                             isGlowing || isReady

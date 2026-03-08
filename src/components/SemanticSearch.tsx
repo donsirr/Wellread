@@ -5,6 +5,7 @@ import { Search, Sparkles, User, Activity, Mail, FileText, Database, HeartPulse 
 import { motion, AnimatePresence } from "framer-motion";
 import { useInspector } from "./InspectorContext";
 import { useStore } from "./StoreContext";
+import initialState from "../state.json";
 
 /* ─────────────────────────────────────────────────────────────
    SemanticSearch — AI gateway with Connection Lines
@@ -21,7 +22,7 @@ interface LineData {
 }
 
 export default function SemanticSearch() {
-    const { setActiveCorrelation } = useStore();
+    const { setActiveCorrelation, switchPatient, setHighlightCard } = useStore();
     const { openInspector } = useInspector();
 
     const [query, setQuery] = useState("");
@@ -39,7 +40,27 @@ export default function SemanticSearch() {
         cleanupRefs.current = [];
         setHoveredCard(null);
 
-        if (query.trim().length > 5) {
+        const lowerQ = query.trim().toLowerCase();
+
+        if (lowerQ) {
+            const patient = initialState.patientDatabase.find(p => p.patientProfile.name.toLowerCase().includes(lowerQ));
+            if (patient && lowerQ.length > 3) {
+                switchPatient(patient.patientProfile.name);
+            }
+
+            let matchedMetricId = null;
+            for (const [metricId, kws] of Object.entries(initialState.searchKeywords)) {
+                if (kws.some(k => lowerQ.includes(k.toLowerCase()))) {
+                    matchedMetricId = metricId;
+                    break;
+                }
+            }
+            setHighlightCard(matchedMetricId);
+        } else {
+            setHighlightCard(null);
+        }
+
+        if (lowerQ.length > 5) {
             setIsThinking(true);
             setLines([]);
 
