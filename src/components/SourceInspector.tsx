@@ -445,30 +445,65 @@ function ClinicalNotePreview({ snippet }: { snippet?: string }) {
 
 function GenericPreview({ source }: { source: any }) {
     const { state } = useStore();
+    const typeLower = (source?.type || "").toLowerCase();
+
+    // Renders a generic email
+    if (typeLower.includes("gmail") || typeLower.includes("email")) {
+        return (
+            <div style={{ background: "white", borderRadius: "16px", border: "1px solid var(--color-border)", overflow: "hidden" }}>
+                <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)" }}>
+                    <div className="flex items-center gap-2 mb-1">
+                        <Mail size={14} strokeWidth={1.5} style={{ color: "#5170FF" }} />
+                        <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-muted)" }}>
+                            Patient Email
+                        </span>
+                    </div>
+                    <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--color-foreground)" }}>
+                        {source?.fileName || "Message from Patient"}
+                    </p>
+                </div>
+                <div style={{ padding: "20px 24px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
+                    <div className="flex items-center gap-2 mb-4">
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--color-primary-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 600, color: "var(--color-primary)" }}>
+                            {state.patientProfile.name.charAt(0)}
+                        </div>
+                        <div>
+                            <span style={{ fontSize: "13px", fontWeight: 500 }}>{state.patientProfile.name}</span>
+                        </div>
+                    </div>
+                    <p style={{ paddingLeft: "36px" }}>
+                        <EvidenceHighlight text={source?.contentSnippet || "No content available."} snippet={source?.evidenceSnippet} />
+                    </p>
+                    <p style={{ paddingLeft: "36px", marginTop: "12px" }}>Best,<br />{state.patientProfile.name.split(" ")[0]}</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Renders a device sync mockup (Fitbit, Oura, Withings)
     return (
-        <div
-            style={{
-                background: "white",
-                borderRadius: "16px",
-                border: "1px solid var(--color-border)",
-                overflow: "hidden",
-            }}
-        >
-            <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)" }}>
+        <div style={{ background: "white", borderRadius: "16px", border: "1px solid var(--color-border)", overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface-secondary)" }}>
+                <div className="flex items-center gap-2 mb-1">
+                    <Zap size={14} strokeWidth={1.5} style={{ color: "#F2994A" }} />
+                    <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-muted)" }}>
+                        {source?.type || "Device Sync"}
+                    </span>
+                </div>
                 <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--color-foreground)" }}>
-                    {source?.fileName || "Data Sync"}
-                </p>
-                <p style={{ fontSize: "12px", color: "var(--color-muted)", marginTop: "2px", textTransform: "capitalize" }}>
-                    Source: {source?.type?.replace('_', ' ') || "External Device"}
+                    {source?.fileName || "Recent Sync Data"}
                 </p>
             </div>
-            <div style={{ padding: "24px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
-                <p>
-                    <EvidenceHighlight text={source?.contentSnippet || "No content snippet available"} snippet={source?.evidenceSnippet} />
-                </p>
-                {source?.type === "gmail" && source?.contentSnippet && (
-                    <p style={{ marginTop: "12px" }}>Best,<br />{state.patientProfile.name.split(" ")[0]}</p>
-                )}
+            <div style={{ padding: "24px" }}>
+                <div style={{ padding: "16px", background: "white", borderRadius: "12px", border: "1px dashed var(--color-border)", display: "flex", flexDirection: "column", gap: "12px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--color-muted)" }}>Data Payload</span>
+                        <span style={{ fontSize: "10px", padding: "2px 6px", background: "var(--color-success-soft)", color: "var(--color-success)", borderRadius: "4px", fontWeight: 600 }}>Decrypted</span>
+                    </div>
+                    <code style={{ fontSize: "12px", background: "var(--color-surface)", padding: "12px", borderRadius: "8px", color: "var(--color-foreground)", overflowWrap: "break-word" }}>
+                        <EvidenceHighlight text={`{ "status": "ok", "timestamp": "${new Date().toISOString()}", "report": "${source?.contentSnippet || 'telemetry data received'}" }`} snippet={source?.evidenceSnippet} />
+                    </code>
+                </div>
             </div>
         </div>
     );
