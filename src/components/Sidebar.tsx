@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import {
     LayoutDashboard,
@@ -13,6 +12,7 @@ import {
     HelpCircle,
     LogOut,
 } from "lucide-react";
+import { useStore } from "./StoreContext";
 
 interface NavItem {
     icon: React.ElementType;
@@ -35,7 +35,8 @@ const bottomNav: NavItem[] = [
 ];
 
 export default function Sidebar() {
-    const [active, setActive] = useState("dashboard");
+    const { state, setActiveTab } = useStore();
+    const active = state.activeTab || "dashboard";
 
     return (
         <nav className="nav-rail">
@@ -59,7 +60,7 @@ export default function Sidebar() {
                         key={item.id}
                         id={`nav-${item.id}`}
                         className={`nav-item ${active === item.id ? "active" : ""}`}
-                        onClick={() => setActive(item.id)}
+                        onClick={() => setActiveTab(item.id)}
                         aria-label={item.label}
                         title={item.label}
                     >
@@ -75,7 +76,7 @@ export default function Sidebar() {
                         key={item.id}
                         id={`nav-${item.id}`}
                         className={`nav-item ${active === item.id ? "active" : ""}`}
-                        onClick={() => setActive(item.id)}
+                        onClick={() => setActiveTab(item.id)}
                         aria-label={item.label}
                         title={item.label}
                     >

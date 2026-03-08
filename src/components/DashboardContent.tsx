@@ -13,7 +13,7 @@ import PatientBadge from "./PatientBadge";
 import TimeMachine from "./TimeMachine";
 import AppHero from "./AppHero";
 import { useStore } from "./StoreContext";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 /* ── Right Panel Skeleton ── */
 
@@ -123,6 +123,8 @@ export default function DashboardContent() {
     const { state } = useStore();
     const [showLanding, setShowLanding] = useState(true);
 
+    const activeTab = state.activeTab || "dashboard";
+
     return (
         <>
             <AnimatePresence>
@@ -178,7 +180,7 @@ export default function DashboardContent() {
                         <SemanticSearch />
 
                         {/* Page header */}
-                        <header className="flex items-start justify-between" style={{ marginBottom: "28px" }}>
+                        <header className="flex items-start justify-between" style={{ marginBottom: "20px" }}>
                             <div>
                                 <h1
                                     className="text-foreground"
@@ -201,14 +203,43 @@ export default function DashboardContent() {
                             <PrivacyGuard />
                         </header>
 
-                        {/* Vitality Grid */}
-                        <VitalityGrid />
+                        {/* Tab Content */}
+                        {(activeTab === "dashboard" || activeTab === "vitals") && (
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                                {/* Vitality Grid */}
+                                <VitalityGrid />
 
-                        {/* Narrative Intelligence */}
-                        <NarrativeIntelligence />
+                                {/* Narrative Intelligence */}
+                                <NarrativeIntelligence />
 
-                        {/* Medical Time-Machine — show after metrics are visible */}
-                        {state.currentStep >= 2 && <TimeMachine />}
+                                {/* Medical Time-Machine — show after metrics are visible */}
+                                {state.currentStep >= 2 && <TimeMachine />}
+                            </motion.div>
+                        )}
+
+                        {activeTab === "records" && (
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
+                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🗂️</div>
+                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Unified Medical Records</h3>
+                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Patient history, previous consults, and external institutional records will be displayed here.</p>
+                            </motion.div>
+                        )}
+
+                        {activeTab === "labs" && (
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
+                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🔬</div>
+                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Laboratory Results</h3>
+                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Comprehensive test results and trending diagnostics will populate in this view.</p>
+                            </motion.div>
+                        )}
+
+                        {activeTab === "schedule" && (
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
+                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>📅</div>
+                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Appointment Schedule</h3>
+                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Upcoming specialized follow-ups and routine wellness visits.</p>
+                            </motion.div>
+                        )}
                     </div>
                 </section>
 

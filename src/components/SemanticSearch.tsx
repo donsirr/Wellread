@@ -60,7 +60,9 @@ export default function SemanticSearch() {
             setHighlightCard(null);
         }
 
-        if (lowerQ.length > 5) {
+        const isRelevant = lowerQ.includes("neuropathy") || lowerQ.includes("symptom") || lowerQ.includes("tingling") || lowerQ.includes("vision") || lowerQ.includes("sugar");
+
+        if (lowerQ.length > 5 && isRelevant) {
             setIsThinking(true);
             setLines([]);
 

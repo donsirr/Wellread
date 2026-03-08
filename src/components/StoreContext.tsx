@@ -24,6 +24,7 @@ export interface StoreState {
     showBrief: boolean;
     currentStep: number;
     activeHighlightCard: string | null;
+    activeTab: string;
 }
 
 interface StoreContextValue {
@@ -38,6 +39,7 @@ interface StoreContextValue {
     resetDemo: () => void;
     switchPatient: (name: string) => void;
     setHighlightCard: (id: string | null) => void;
+    setActiveTab: (tabId: string) => void;
 }
 
 const StoreContext = createContext<StoreContextValue | undefined>(undefined);
@@ -58,6 +60,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         showBrief: false, // Hidden by default for the demo flow
         currentStep: 0,
         activeHighlightCard: null,
+        activeTab: "vitals",
     });
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -187,6 +190,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setState(prev => ({ ...prev, activeHighlightCard: id }));
     };
 
+    const setActiveTab = (tabId: string) => {
+        setState(prev => ({ ...prev, activeTab: tabId }));
+    };
+
     const updateMetric = (id: string, newValue: string) => {
         setState(prev => ({
             ...prev,
@@ -211,7 +218,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return (
         <StoreContext.Provider value={{
             state, setActiveCorrelation, isCorrelationActive, updateState, updateMetric, triggerCorrelation,
-            startAutoDemo, jumpToStep, resetDemo, switchPatient, setHighlightCard
+            startAutoDemo, jumpToStep, resetDemo, switchPatient, setHighlightCard, setActiveTab
         }}>
             {children}
         </StoreContext.Provider>
