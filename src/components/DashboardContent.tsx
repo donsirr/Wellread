@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { FileText, Stethoscope, FileOutput, FlaskConical, Calendar, Video, MapPin, Search } from "lucide-react";
 
 import VitalityGrid from "./VitalityGrid";
 import NarrativeIntelligence from "./NarrativeIntelligence";
@@ -218,26 +219,116 @@ export default function DashboardContent() {
                         )}
 
                         {activeTab === "records" && (
-                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
-                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🗂️</div>
-                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Unified Medical Records</h3>
-                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Patient history, previous consults, and external institutional records will be displayed here.</p>
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-4">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)" }}>Institutional Records</h3>
+                                    <div className="flex bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 items-center gap-2">
+                                        <Search size={14} className="text-muted" />
+                                        <input type="text" placeholder="Search records..." className="bg-transparent border-none outline-none text-[13px] text-foreground placeholder:text-muted w-48" />
+                                    </div>
+                                </div>
+                                <div className="grid gap-3">
+                                    {[
+                                        { title: "PCP Annual Wellness Visit", date: "Jan 12, 2026", doctor: "Dr. Sarah Mitchell", type: "Clinical Note", icon: Stethoscope },
+                                        { title: "Cardiology Consult", date: "Nov 04, 2025", doctor: "Dr. James Wilson", type: "Consultation", icon: FileText },
+                                        { title: "Chest X-Ray Report", date: "Nov 02, 2025", doctor: "City Imaging Center", type: "Imaging", icon: FileOutput },
+                                        { title: "Discharge Summary (ER)", date: "Aug 15, 2025", doctor: "General Hospital", type: "Discharge", icon: FileText },
+                                    ].map((rec, i) => (
+                                        <div key={i} className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors cursor-pointer">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                                    <rec.icon size={18} strokeWidth={1.5} />
+                                                </div>
+                                                <div>
+                                                    <h4 style={{ fontSize: "14px", fontWeight: 500, color: "var(--color-foreground)" }}>{rec.title}</h4>
+                                                    <p style={{ fontSize: "12px", color: "var(--color-muted)", marginTop: "2px" }}>{rec.doctor} · {rec.type}</p>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p style={{ fontSize: "12px", fontWeight: 500, color: "var(--color-foreground)" }}>{rec.date}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </motion.div>
                         )}
 
                         {activeTab === "labs" && (
-                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
-                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🔬</div>
-                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Laboratory Results</h3>
-                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Comprehensive test results and trending diagnostics will populate in this view.</p>
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)" }}>Recent Laboratory Results</h3>
+                                    <span style={{ fontSize: "12px", color: "var(--color-muted)" }}>Last updated: Mar 10, 2026</span>
+                                </div>
+                                <div className="overflow-hidden border border-white/10 rounded-xl bg-white/5">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-white/10 text-[11px] uppercase tracking-wider text-muted font-semibold bg-white/5">
+                                                <th className="p-4">Test Name</th>
+                                                <th className="p-4">Result</th>
+                                                <th className="p-4">Reference Range</th>
+                                                <th className="p-4">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-[13px]">
+                                            {[
+                                                { test: "Complete Blood Count (CBC)", result: "Normal", range: "Standard", date: "Feb 22, 2026", status: "normal" },
+                                                { test: "Comprehensive Metabolic Panel", result: "Reviewed", range: "Standard", date: "Feb 22, 2026", status: "normal" },
+                                                { test: "Lipid Panel", result: "Elevated LDL", range: "< 100 mg/dL", date: "Jan 12, 2026", status: "flag" },
+                                                { test: "Hemoglobin A1c", result: "Review Needed", range: "< 5.7%", date: "Jan 12, 2026", status: "flag" },
+                                                { test: "Thyroid Stimulating Hormone (TSH)", result: "2.1 mIU/L", range: "0.4 - 4.0 mIU/L", date: "Oct 15, 2025", status: "normal" },
+                                            ].map((lab, i) => (
+                                                <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer">
+                                                    <td className="p-4 font-medium text-foreground flex items-center gap-2">
+                                                        <FlaskConical size={14} className="text-primary opacity-70" /> {lab.test}
+                                                    </td>
+                                                    <td className={`p-4 font-semibold ${lab.status === 'flag' ? 'text-danger' : 'text-foreground'}`}>{lab.result}</td>
+                                                    <td className="p-4 text-muted">{lab.range}</td>
+                                                    <td className="p-4 text-muted">{lab.date}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </motion.div>
                         )}
 
                         {activeTab === "schedule" && (
-                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} style={{ padding: "40px 0", textAlign: "center", color: "var(--color-muted)" }}>
-                                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>📅</div>
-                                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)", marginBottom: "8px" }}>Appointment Schedule</h3>
-                                <p style={{ fontSize: "13px", maxWidth: "400px", margin: "0 auto" }}>Upcoming specialized follow-ups and routine wellness visits.</p>
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-foreground)" }}>Upcoming Appointments</h3>
+                                    <button className="bg-primary/10 text-primary px-4 py-1.5 rounded-lg text-[13px] font-semibold hover:bg-primary/20 transition-colors">
+                                        Book New
+                                    </button>
+                                </div>
+                                <div className="grid gap-4">
+                                    {[
+                                        { type: "Video Visit", title: "Endocrinology Follow-up", doctor: "Dr. Chen", date: "Tomorrow, 10:00 AM", location: "Telehealth Link", icon: Video },
+                                        { type: "In-Person", title: "Annual Physical Exam", doctor: "Dr. Mitchell", date: "Apr 15, 2026, 2:30 PM", location: "Main Clinic, Room 4B", icon: MapPin },
+                                        { type: "Lab Visit", title: "Routine Blood Draw", doctor: "Quest Diagnostics", date: "May 01, 2026, 8:00 AM", location: "Downtown Lab Center", icon: FlaskConical },
+                                    ].map((appt, i) => (
+                                        <div key={i} className="flex items-center p-4 bg-white/5 border border-white/10 rounded-xl hover:border-primary/30 transition-colors relative overflow-hidden group">
+                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary scale-y-0 group-hover:scale-y-100 transition-transform origin-center" />
+                                            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mr-4">
+                                                <appt.icon size={20} className="text-foreground opacity-80" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2">
+                                                    <h4 style={{ fontSize: "15px", fontWeight: 600, color: "var(--color-foreground)" }}>{appt.title}</h4>
+                                                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-muted">{appt.type}</span>
+                                                </div>
+                                                <p style={{ fontSize: "13px", color: "var(--color-muted)", marginTop: "2px" }}>{appt.doctor}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="flex items-center gap-1.5 justify-end text-foreground font-medium text-[13px] flex items-center">
+                                                    <Calendar size={14} className="opacity-70" /> {appt.date}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 justify-end text-muted text-[12px] mt-1 flex items-center">
+                                                    {appt.location}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </motion.div>
                         )}
                     </div>

@@ -8,28 +8,103 @@ import { useStore } from "./StoreContext";
 
 interface TimelineEvent {
     month: string;
-    hba1c: number;
+    value: number;
     label?: string;
     source?: string;
     type: "past" | "present" | "future";
 }
 
-/* ── Data ── */
-
-const TIMELINE_DATA: TimelineEvent[] = [
-    { month: "Sep 2025", hba1c: 7.2, label: "Routine checkup – stable", source: "Lab Report", type: "past" },
-    { month: "Oct 2025", hba1c: 7.4, label: "Started new diet plan", source: "Gmail", type: "past" },
-    { month: "Nov 2025", hba1c: 7.6, label: "Missed medication 3 days", source: "Calendar", type: "past" },
-    { month: "Dec 2025", hba1c: 7.9, label: "Holiday diet inconsistency", source: "Gmail", type: "past" },
-    { month: "Jan 2026", hba1c: 8.1, label: "Weight gain reported", source: "Gmail", type: "past" },
-    { month: "Feb 2026", hba1c: 8.4, label: "Neuropathy symptoms onset", source: "Gmail", type: "past" },
-    { month: "Mar 2026", hba1c: 8.6, label: "Current reading – ALERT", source: "Lab PDF", type: "present" },
-    // Projection
-    { month: "Apr 2026", hba1c: 8.2, label: "Projected with intervention", type: "future" },
-    { month: "May 2026", hba1c: 7.6, label: "Lifestyle + medication adj.", type: "future" },
-    { month: "Jun 2026", hba1c: 7.1, label: "Target trajectory", type: "future" },
-    { month: "Jul 2026", hba1c: 6.8, label: "🎯 Target: 6.8%", type: "future" },
-];
+const PATIENT_TIMELINES: Record<string, {
+    metricName: string;
+    unit: string;
+    minVal: number;
+    maxVal: number;
+    yTicks: number[];
+    targetVal: number;
+    events: TimelineEvent[];
+}> = {
+    "Juan Dela Cruz": {
+        metricName: "HbA1c",
+        unit: "%",
+        minVal: 6.0,
+        maxVal: 9.0,
+        yTicks: [7.0, 7.5, 8.0, 8.5],
+        targetVal: 6.8,
+        events: [
+            { month: "Sep 2025", value: 7.2, label: "Routine checkup – stable", source: "Lab Report", type: "past" },
+            { month: "Oct 2025", value: 7.4, label: "Started new diet plan", source: "Gmail", type: "past" },
+            { month: "Nov 2025", value: 7.6, label: "Missed medication 3 days", source: "Calendar", type: "past" },
+            { month: "Dec 2025", value: 7.9, label: "Holiday diet inconsistency", source: "Gmail", type: "past" },
+            { month: "Jan 2026", value: 8.1, label: "Weight gain reported", source: "Gmail", type: "past" },
+            { month: "Feb 2026", value: 8.4, label: "Neuropathy symptoms onset", source: "Gmail", type: "past" },
+            { month: "Mar 2026", value: 8.6, label: "Current reading – ALERT", source: "Lab PDF", type: "present" },
+            { month: "Apr 2026", value: 8.2, label: "Projected with intervention", type: "future" },
+            { month: "May 2026", value: 7.6, label: "Lifestyle + medication adj.", type: "future" },
+            { month: "Jun 2026", value: 7.1, label: "Target trajectory", type: "future" },
+            { month: "Jul 2026", value: 6.8, label: "🎯 Target: 6.8", type: "future" },
+        ]
+    },
+    "Maria Dela Cruz": {
+        metricName: "Systolic BP",
+        unit: " mmHg",
+        minVal: 100,
+        maxVal: 170,
+        yTicks: [120, 130, 140, 150, 160],
+        targetVal: 120,
+        events: [
+            { month: "Oct 2025", value: 125, label: "Office visit – stable", source: "Clinic Note", type: "past" },
+            { month: "Nov 2025", value: 130, label: "Pharmacy pickup delayed", source: "Pharmacy", type: "past" },
+            { month: "Dec 2025", value: 142, label: "Holiday sodium intake", source: "Diet Log", type: "past" },
+            { month: "Jan 2026", value: 138, label: "Medication resumed", source: "Patient Portal", type: "past" },
+            { month: "Feb 2026", value: 148, label: "Headache reported", source: "Withings App", type: "past" },
+            { month: "Mar 2026", value: 156, label: "Current reading – ALERT", source: "Withings App", type: "present" },
+            { month: "Apr 2026", value: 140, label: "Projected with lisinopril incr.", type: "future" },
+            { month: "May 2026", value: 130, label: "Lifestyle + medication adj.", type: "future" },
+            { month: "Jun 2026", value: 125, label: "Target trajectory", type: "future" },
+            { month: "Jul 2026", value: 120, label: "🎯 Target: 120", type: "future" },
+        ]
+    },
+    "Jane Doe": {
+        metricName: "Readiness Score",
+        unit: "",
+        minVal: 40,
+        maxVal: 100,
+        yTicks: [50, 60, 70, 80, 90],
+        targetVal: 85,
+        events: [
+            { month: "Oct 2025", value: 88, label: "Baseline established", source: "Oura Sync", type: "past" },
+            { month: "Nov 2025", value: 85, label: "Consistent sleep", source: "Oura Sync", type: "past" },
+            { month: "Dec 2025", value: 78, label: "Holiday travel fatigue", source: "Oura Sync", type: "past" },
+            { month: "Jan 2026", value: 82, label: "Restored routine", source: "Oura Sync", type: "past" },
+            { month: "Feb 2026", value: 65, label: "Stress indicator up", source: "Oura Sync", type: "past" },
+            { month: "Mar 2026", value: 58, label: "Current reading – FATIGUE", source: "Oura Sync", type: "present" },
+            { month: "Apr 2026", value: 70, label: "Projected with sleep hygiene", type: "future" },
+            { month: "May 2026", value: 78, label: "Recovery trending up", type: "future" },
+            { month: "Jun 2026", value: 82, label: "Approaching optimal", type: "future" },
+            { month: "Jul 2026", value: 85, label: "🎯 Target: 85", type: "future" },
+        ]
+    },
+    "John Doe": {
+        metricName: "Weight",
+        unit: " lbs",
+        minVal: 180,
+        maxVal: 220,
+        yTicks: [190, 200, 210],
+        targetVal: 195,
+        events: [
+            { month: "Oct 2025", value: 202, label: "Intake weight", source: "Clinic Note", type: "past" },
+            { month: "Nov 2025", value: 205, label: "Thanksgiving reporting", source: "Patient Portal", type: "past" },
+            { month: "Dec 2025", value: 208, label: "Holiday sedentary", source: "Patient Portal", type: "past" },
+            { month: "Jan 2026", value: 206, label: "New Year resolution", source: "Patient Portal", type: "past" },
+            { month: "Feb 2026", value: 212, label: "Stress eating reported", source: "Intake Form", type: "past" },
+            { month: "Mar 2026", value: 215, label: "Current reading – ELEVATED", source: "Intake Form", type: "present" },
+            { month: "Apr 2026", value: 208, label: "Projected with care plan", type: "future" },
+            { month: "May 2026", value: 202, label: "Diet adherence modeling", type: "future" },
+            { month: "Jun 2026", value: 198, label: "Trending towards goal", type: "future" },
+            { month: "Jul 2026", value: 195, label: "🎯 Target: 195", type: "future" },
+        ]
+    }
+};
 
 /* ── Tooltip ── */
 
@@ -67,7 +142,7 @@ function EventTooltip({ event, x, y }: { event: TimelineEvent; x: number; y: num
             }}
         >
             <div style={{ fontWeight: 600, marginBottom: "2px" }}>
-                {event.month} · HbA1c {event.hba1c}%
+                {event.month} · {event.value}
             </div>
             <div style={{ color: "rgba(255,255,255,0.7)" }}>
                 {event.source && <span>{sourceIcon} Found in {event.source}: </span>}
@@ -84,11 +159,21 @@ function TimelineChart({
     sliderValue,
     onHover,
     onLeave,
+    config,
 }: {
     showProjection: boolean;
     sliderValue: number;
     onHover: (ev: TimelineEvent, x: number, y: number) => void;
     onLeave: () => void;
+    config: {
+        metricName: string;
+        unit: string;
+        minVal: number;
+        maxVal: number;
+        yTicks: number[];
+        targetVal: number;
+        events: TimelineEvent[];
+    };
 }) {
     const svgRef = useRef<SVGSVGElement>(null);
     const W = 700;
@@ -97,17 +182,16 @@ function TimelineChart({
     const padTop = 20;
     const padBot = 32;
 
-    const pastData = TIMELINE_DATA.filter(d => d.type !== "future");
-    const futureData = TIMELINE_DATA.filter(d => d.type === "future");
-    const allData = showProjection ? TIMELINE_DATA : pastData;
+    const timelineData = config.events;
+    const pastData = timelineData.filter(d => d.type !== "future");
+    const futureData = timelineData.filter(d => d.type === "future");
+    const allData = showProjection ? timelineData : pastData;
 
-    const minVal = 6.0;
-    const maxVal = 9.0;
-    const scaleY = (v: number) => padTop + ((maxVal - v) / (maxVal - minVal)) * (H - padTop - padBot);
+    const scaleY = (v: number) => padTop + ((config.maxVal - v) / (config.maxVal - config.minVal)) * (H - padTop - padBot);
     const scaleX = (i: number) => padX + (i / (allData.length - 1)) * (W - padX * 2);
 
     // Build past path
-    const pastPoints = pastData.map((d, i) => ({ x: scaleX(i), y: scaleY(d.hba1c), data: d }));
+    const pastPoints = pastData.map((d, i) => ({ x: scaleX(i), y: scaleY(d.value), data: d }));
     let pastD = `M ${pastPoints[0].x},${pastPoints[0].y}`;
     for (let i = 1; i < pastPoints.length; i++) {
         const cx = (pastPoints[i - 1].x + pastPoints[i].x) / 2;
@@ -120,7 +204,7 @@ function TimelineChart({
         const lastPast = pastPoints[pastPoints.length - 1];
         const futurePoints = futureData.map((d, i) => ({
             x: scaleX(pastData.length + i),
-            y: scaleY(d.hba1c),
+            y: scaleY(d.value),
             data: d,
         }));
         futureD = `M ${lastPast.x},${lastPast.y}`;
@@ -134,11 +218,8 @@ function TimelineChart({
     // Slider vertical line
     const sliderX = padX + (sliderValue / 100) * (W - padX * 2);
 
-    // Target line at 6.8%
-    const targetY = scaleY(6.8);
-
-    // Y-axis grid
-    const yTicks = [7.0, 7.5, 8.0, 8.5];
+    // Target line
+    const targetY = scaleY(config.targetVal);
 
     return (
         <svg
@@ -169,14 +250,14 @@ function TimelineChart({
             </defs>
 
             {/* Y-axis grid lines */}
-            {yTicks.map(v => (
+            {config.yTicks.map(v => (
                 <g key={v}>
                     <line
                         x1={padX} y1={scaleY(v)} x2={W - padX} y2={scaleY(v)}
                         stroke="var(--color-border)" strokeWidth="0.5" strokeDasharray="4 4"
                     />
                     <text x={padX - 6} y={scaleY(v) + 3} textAnchor="end" fontSize="9" fill="var(--color-muted)" fontFamily="Inter, sans-serif">
-                        {v}%
+                        {v}{config.unit}
                     </text>
                 </g>
             ))}
@@ -189,7 +270,7 @@ function TimelineChart({
                         stroke="#27AE60" strokeWidth="1" strokeDasharray="6 3" opacity="0.5"
                     />
                     <text x={W - padX} y={targetY - 5} textAnchor="end" fontSize="9" fill="#27AE60" fontWeight="600" fontFamily="Inter, sans-serif">
-                        6.8% Target
+                        {config.targetVal}{config.unit} Target
                     </text>
                 </g>
             )}
@@ -268,7 +349,7 @@ function TimelineChart({
             {/* Future dots */}
             {showProjection && futureData.map((d, i) => {
                 const x = scaleX(pastData.length + i);
-                const y = scaleY(d.hba1c);
+                const y = scaleY(d.value);
                 const isTarget = i === futureData.length - 1;
                 return (
                     <g key={`f-${i}`} style={{ animation: `tm-dot-in 0.3s ease ${0.4 + i * 0.1}s both` }}>
@@ -325,27 +406,30 @@ export default function TimeMachine() {
     const [tooltip, setTooltip] = useState<{ event: TimelineEvent; x: number; y: number } | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    const config = PATIENT_TIMELINES[state.patientProfile.name] || PATIENT_TIMELINES["Juan Dela Cruz"];
+    const timelineData = config.events;
+
     // Determine narrative text based on slider position
     const getNarrative = () => {
-        const pastCount = TIMELINE_DATA.filter(d => d.type !== "future").length;
-        const totalCount = showProjection ? TIMELINE_DATA.length : pastCount;
+        const pastCount = timelineData.filter(d => d.type !== "future").length;
+        const totalCount = showProjection ? timelineData.length : pastCount;
         const idx = Math.round((sliderValue / 100) * (totalCount - 1));
-        const event = (showProjection ? TIMELINE_DATA : TIMELINE_DATA.filter(d => d.type !== "future"))[idx];
+        const event = (showProjection ? timelineData : timelineData.filter(d => d.type !== "future"))[idx];
         if (!event) return { text: "", period: "" };
 
         if (event.type === "present") {
             return {
-                text: `Current alert: HbA1c at ${event.hba1c}% — elevated above normal range. Peripheral neuropathy symptoms correlating with glycemic spike.`,
+                text: `Current alert: ${config.metricName} at ${event.value}${config.unit} — elevated above normal range. Clinical anomaly correlating with recent symptomatic history.`,
                 period: "Present",
             };
         } else if (event.type === "future") {
             return {
-                text: `Projected: With medication adjustment and lifestyle intervention, HbA1c could reach ${event.hba1c}% by ${event.month}.`,
+                text: `Projected: With planned intervention, ${config.metricName} could reach ${event.value}${config.unit} by ${event.month}.`,
                 period: "Projected Future",
             };
         } else {
             return {
-                text: `${event.month}: ${event.label || "No events recorded"} — HbA1c at ${event.hba1c}%.`,
+                text: `${event.month}: ${event.label || "No events recorded"} — ${config.metricName} at ${event.value}${config.unit}.`,
                 period: "Historical Trace",
             };
         }
@@ -442,6 +526,7 @@ export default function TimeMachine() {
                         sliderValue={sliderValue}
                         onHover={handleHover}
                         onLeave={() => setTooltip(null)}
+                        config={config}
                     />
                     {tooltip && <EventTooltip {...tooltip} />}
                 </div>
