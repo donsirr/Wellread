@@ -99,8 +99,6 @@ export default function SemanticSearch() {
         setQuery(option);
         setIsFocused(false);
         if (option.toLowerCase().includes("neuropathy") || option.toLowerCase().includes("symptoms")) {
-            // Logic Integration: Link the search results to the activeCorrelationId in the state.json.
-            setActiveCorrelation("corr-juan");
             // If a user searches 'Neuropathy', the UI should automatically open the Source Inspector and highlight the 'tingling in toes' Gmail snippet.
             openInspector({
                 id: "src-gmail",
