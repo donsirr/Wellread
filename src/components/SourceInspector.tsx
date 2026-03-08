@@ -440,6 +440,41 @@ function ClinicalNotePreview({ snippet }: { snippet?: string }) {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Generic Data Preview (For other patients/types)
+   ───────────────────────────────────────────────────────────── */
+
+function GenericPreview({ source }: { source: any }) {
+    const { state } = useStore();
+    return (
+        <div
+            style={{
+                background: "white",
+                borderRadius: "16px",
+                border: "1px solid var(--color-border)",
+                overflow: "hidden",
+            }}
+        >
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)" }}>
+                <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--color-foreground)" }}>
+                    {source?.fileName || "Data Sync"}
+                </p>
+                <p style={{ fontSize: "12px", color: "var(--color-muted)", marginTop: "2px", textTransform: "capitalize" }}>
+                    Source: {source?.type?.replace('_', ' ') || "External Device"}
+                </p>
+            </div>
+            <div style={{ padding: "24px", fontSize: "13.5px", lineHeight: 1.7, color: "var(--color-foreground)" }}>
+                <p>
+                    <EvidenceHighlight text={source?.contentSnippet || "No content snippet available"} snippet={source?.evidenceSnippet} />
+                </p>
+                {source?.type === "gmail" && source?.contentSnippet && (
+                    <p style={{ marginTop: "12px" }}>Best,<br />{state.patientProfile.name.split(" ")[0]}</p>
+                )}
+            </div>
+        </div>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Insight Sidebar (inside the modal)
    ───────────────────────────────────────────────────────────── */
 
@@ -591,6 +626,7 @@ function InsightSidebar({ type }: { type: "pdf" | "gmail" | "calendar" | "clinic
 
 export default function SourceInspector() {
     const { isOpen, source, closeInspector } = useInspector();
+    const { state } = useStore();
     const [closing, setClosing] = useState(false);
 
     // Handle escape key
@@ -658,8 +694,8 @@ export default function SourceInspector() {
                             <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--color-foreground)" }}>
                                 {source?.fileName ?? "Document"}
                             </p>
-                            <p style={{ fontSize: "11px", color: "var(--color-muted)" }}>
-                                {type === "gmail" ? "Gmail Thread · 3 messages" : type === "clinical_note" || type === "calendar" ? "Clinical Summary Note" : "Lab Report PDF · 2.4 MB"}
+                            <p style={{ fontSize: "11px", color: "var(--color-muted)", textTransform: "capitalize" }}>
+                                {type === "gmail" ? "Email Thread" : type === "clinical_note" || type === "calendar" ? "Clinical Summary Note" : type === "pdf" ? "Lab Report PDF" : "Synced Device Data"}
                             </p>
                         </div>
                     </div>
@@ -713,7 +749,11 @@ export default function SourceInspector() {
                         className="flex-1 overflow-y-auto"
                         style={{ padding: "24px" }}
                     >
-                        {type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : type === "clinical_note" || type === "calendar" ? <ClinicalNotePreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />}
+                        {state.patientProfile.name === "Juan Dela Cruz" ? (
+                            type === "gmail" ? <GmailPreview snippet={source?.evidenceSnippet} /> : type === "clinical_note" || type === "calendar" ? <ClinicalNotePreview snippet={source?.evidenceSnippet} /> : <PDFPreview snippet={source?.evidenceSnippet} />
+                        ) : (
+                            <GenericPreview source={source} />
+                        )}
 
                         {/* Bottom action */}
                         <div className="flex items-center gap-3 mt-4">
@@ -784,7 +824,23 @@ export default function SourceInspector() {
                     </div>
 
                     {/* Insight Sidebar */}
-                    <InsightSidebar type={type} />
+                    {state.patientProfile.name === "Juan Dela Cruz" ? (
+                        <InsightSidebar type={type as any} />
+                    ) : (
+                        <div className="insight-panel" style={{ padding: "20px" }}>
+                            <div className="flex items-center gap-1.5 mb-4">
+                                <Sparkles size={14} strokeWidth={2} style={{ color: "var(--color-primary)" }} />
+                                <h3 style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--color-foreground)" }}>
+                                    AI Insights
+                                </h3>
+                            </div>
+                            <div style={{ padding: "14px", borderRadius: "10px", background: "var(--color-surface)", border: "1px solid var(--color-border)" }}>
+                                <p style={{ fontSize: "12px", lineHeight: 1.6, color: "var(--color-foreground)" }}>
+                                    External source ingested and indexed. Values are correlated with your primary dashboard timeline.
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

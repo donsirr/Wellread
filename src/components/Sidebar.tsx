@@ -22,7 +22,6 @@ interface NavItem {
 
 const topNav: NavItem[] = [
     { icon: LayoutDashboard, label: "Dashboard", id: "dashboard" },
-    { icon: Activity, label: "Vitals", id: "vitals" },
     { icon: FileText, label: "Records", id: "records" },
     { icon: FlaskConical, label: "Labs", id: "labs" },
     { icon: CalendarDays, label: "Schedule", id: "schedule" },

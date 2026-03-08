@@ -7,6 +7,8 @@ import {
     ShieldCheck,
     Clock,
     Sparkles,
+    Activity,
+    Moon
 } from "lucide-react";
 import { useInspector, type SourceType } from "./InspectorContext";
 import { useStore } from "./StoreContext";
@@ -87,10 +89,13 @@ interface SourceFile {
     fileName: string;
 }
 
+// (Add to existing lucide imports, then update map below)
 const iconMap: Record<string, React.ElementType> = {
     Mail,
     FileText,
-    Calendar: CalendarDays
+    Calendar: CalendarDays,
+    Activity,
+    Moon
 };
 
 /* ── SourceArchive Component ── */
@@ -213,10 +218,12 @@ export default function SourceArchive() {
                 const IconComponent = iconMap[src.iconType] || FileText;
 
                 // Color defaults mapping based on iconType
-                const colorMap: Record<string, { iconColor: string, iconBg: string, inspectorType: SourceType }> = {
+                const colorMap: Record<string, { iconColor: string, iconBg: string, inspectorType: SourceType | string }> = {
                     "Mail": { iconColor: "#5170FF", iconBg: "rgba(81, 112, 255, 0.08)", inspectorType: "gmail" },
                     "FileText": { iconColor: "#EB5757", iconBg: "rgba(235, 87, 87, 0.06)", inspectorType: "pdf" },
-                    "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "clinical_note" }
+                    "Calendar": { iconColor: "#F2994A", iconBg: "rgba(242, 153, 74, 0.08)", inspectorType: "clinical_note" },
+                    "Activity": { iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.08)", inspectorType: "device_sync" },
+                    "Moon": { iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.08)", inspectorType: "device_sync" }
                 };
 
                 const styleConfig = colorMap[src.iconType] || colorMap["FileText"];
@@ -235,7 +242,7 @@ export default function SourceArchive() {
                             if (src.id === "src-lab-pdf") evidenceSnippet = "HbA1c";
                             if (src.id === "src-calendar") evidenceSnippet = "persistent neuropathy";
 
-                            openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true, evidenceSnippet })
+                            openInspector({ id: src.id, fileName: src.name, type: styleConfig.inspectorType, verified: true, evidenceSnippet, contentSnippet: src.contentSnippet })
                         }}
                     >
                         <div className="flex items-start gap-3">

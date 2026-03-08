@@ -7,9 +7,10 @@ export type SourceType = "pdf" | "gmail" | "calendar" | "clinical_note";
 export interface InspectorSource {
     id: string;
     fileName: string;
-    type: SourceType;
+    type: SourceType | string;
     verified: boolean;
     evidenceSnippet?: string;
+    contentSnippet?: string;
 }
 
 interface InspectorContextValue {

@@ -227,12 +227,15 @@ export default function SemanticSearch() {
                             <div className="mb-2 px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                                 Institutional
                             </div>
-                            <div
-                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
-                                onClick={() => handleSelectOption('Juan Dela Cruz')}
-                            >
-                                <User size={14} className="text-muted-foreground" /> Juan Dela Cruz
-                            </div>
+                            {initialState.patientDatabase.map(p => (
+                                <div
+                                    key={p.id}
+                                    className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                    onClick={() => handleSelectOption(p.patientProfile.name)}
+                                >
+                                    <User size={14} className="text-muted-foreground" /> {p.patientProfile.name}
+                                </div>
+                            ))}
                             <div
                                 className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
                                 onClick={() => handleSelectOption('Clinical Records')}
