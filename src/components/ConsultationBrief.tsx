@@ -269,16 +269,20 @@ export default function ConsultationBrief() {
                         ))}
 
                         {/* Dynamic Health Gaps */}
-                        {state.healthGaps && state.healthGaps.map((gap, i) => (
-                            <div key={`gap-${i}`} className="flex items-start gap-2.5 mt-2 p-3 rounded-lg" style={{ background: "var(--color-danger-soft)", border: "1px solid rgba(235, 87, 87, 0.2)" }}>
-                                <div style={{ marginTop: "2px" }}>
-                                    <Plus size={14} strokeWidth={2.5} style={{ color: "var(--color-danger)" }} />
+                        {state.healthGaps && state.healthGaps.map((gap, i) => {
+                            const displayGap = gap.replace(/^Potential Gap:\s*/i, '');
+                            return (
+                                <div key={`gap-${i}`} className="flex items-start gap-2.5 mt-3 p-3 rounded-lg" style={{ background: "rgba(242, 153, 74, 0.08)", border: "1px solid rgba(242, 153, 74, 0.2)" }}>
+                                    <div style={{ marginTop: "2px" }}>
+                                        <Monitor size={14} strokeWidth={2} style={{ color: "#F2994A" }} />
+                                    </div>
+                                    <div style={{ fontSize: "12px", lineHeight: 1.5 }}>
+                                        <span style={{ fontWeight: 600, color: "#d97706", display: "block", marginBottom: "3px", textTransform: "uppercase", letterSpacing: "0.04em", fontSize: "10px" }}>Missing Clinical Data</span>
+                                        <span style={{ color: "var(--color-foreground)", opacity: 0.9 }}>{displayGap}</span>
+                                    </div>
                                 </div>
-                                <p style={{ fontSize: "12px", lineHeight: 1.5, color: "var(--color-danger)", fontWeight: 500 }}>
-                                    <span style={{ fontWeight: 700 }}>AI FLAG:</span> {gap}
-                                </p>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
 
