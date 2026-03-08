@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, User, Activity, Mail, FileText, Database, HeartPulse } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useInspector } from "./InspectorContext";
+import { useStore } from "./StoreContext";
 
 /* ─────────────────────────────────────────────────────────────
    SemanticSearch — AI gateway with Connection Lines
@@ -19,7 +21,11 @@ interface LineData {
 }
 
 export default function SemanticSearch() {
+    const { setActiveCorrelation } = useStore();
+    const { openInspector } = useInspector();
+
     const [query, setQuery] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
     const [isThinking, setIsThinking] = useState(false);
     const [lines, setLines] = useState<LineData[]>([]);
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -57,6 +63,7 @@ export default function SemanticSearch() {
     const drawConnections = () => {
         if (!containerRef.current) return;
 
+        // If dropdown is open, might interfere with lines visually, but we'll leave as is.
         const searchRect = containerRef.current.getBoundingClientRect();
 
         const newLines: LineData[] = [];
@@ -119,6 +126,38 @@ export default function SemanticSearch() {
         return () => window.removeEventListener("resize", handleResize);
     }, [lines.length]);
 
+    const getPrefixIcon = () => {
+        if (isThinking) {
+            return (
+                <div className="relative flex items-center justify-center w-5 h-5">
+                    <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                    <Sparkles size={10} className="text-primary animate-pulse" />
+                </div>
+            );
+        }
+        const lowerQuery = query.toLowerCase();
+        if (lowerQuery.includes('juan') || lowerQuery.includes('name')) return <User size={18} className="text-muted-foreground" />;
+        if (lowerQuery.includes('metric') || lowerQuery.includes('blood') || lowerQuery.includes('hba1c') || lowerQuery.includes('trajectory') || lowerQuery.includes('pulse')) return <Activity size={18} className="text-muted-foreground" />;
+        return <Search size={18} className="text-muted-foreground" />;
+    };
+
+    const handleSelectOption = (option: string) => {
+        setQuery(option);
+        setIsFocused(false);
+        if (option.toLowerCase().includes("neuropathy") || option.toLowerCase().includes("symptoms")) {
+            // Logic Integration: Link the search results to the activeCorrelationId in the state.json.
+            setActiveCorrelation("corr-juan");
+            // If a user searches 'Neuropathy', the UI should automatically open the Source Inspector and highlight the 'tingling in toes' Gmail snippet.
+            openInspector({
+                id: "src-gmail",
+                fileName: "Symptom Update",
+                type: "gmail",
+                verified: true,
+                evidenceSnippet: "tingling in my toes"
+            });
+        }
+    };
+
     return (
         <>
             <div
@@ -126,17 +165,9 @@ export default function SemanticSearch() {
                 className="relative w-full mb-8 z-20"
             >
                 <div
-                    className={`flex items-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md border rounded-2xl transition-all duration-300 ${isThinking ? "border-primary/50 shadow-[0_0_15px_rgba(81, 112, 255,0.2)]" : "border-white/40 shadow-xl shadow-slate-200/50"
-                        }`}
+                    className={`flex items-center gap-3 px-4 py-3 border transition-all duration-300 ${isThinking ? "border-primary/50 shadow-[0_0_15px_rgba(81, 112, 255,0.2)]" : "border-white/20 shadow-inner rounded-xl"} bg-white/10 backdrop-blur-md`}
                 >
-                    {isThinking ? (
-                        <div className="relative flex items-center justify-center w-5 h-5">
-                            <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-                            <Sparkles size={10} className="text-primary animate-pulse" />
-                        </div>
-                    ) : (
-                        <Search size={18} className="text-muted-foreground" />
-                    )}
+                    {getPrefixIcon()}
 
                     <input
                         type="text"
@@ -144,6 +175,13 @@ export default function SemanticSearch() {
                         className="flex-1 bg-transparent border-none outline-none text-[14px] text-foreground placeholder:text-muted-foreground/70"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSelectOption(query);
+                            }
+                        }}
                     />
 
                     {isThinking && (
@@ -152,6 +190,73 @@ export default function SemanticSearch() {
                         </span>
                     )}
                 </div>
+
+                {/* Smart Autocomplete Dropdown */}
+                <AnimatePresence>
+                    {isFocused && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden z-50 p-2"
+                        >
+                            <div className="mb-2 px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                Institutional
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Juan Dela Cruz')}
+                            >
+                                <User size={14} className="text-muted-foreground" /> Juan Dela Cruz
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Clinical Records')}
+                            >
+                                <Database size={14} className="text-muted-foreground" /> Clinical Records
+                            </div>
+
+                            <div className="mt-2 mb-2 px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                Contextual (MCP)
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Search Symptoms in Gmail')}
+                            >
+                                <Mail size={14} className="text-muted-foreground" /> Search Symptoms in Gmail
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Search Labs in Drive')}
+                            >
+                                <FileText size={14} className="text-muted-foreground" /> Search Labs in Drive
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Neuropathy')}
+                            >
+                                <Sparkles size={14} className="text-primary" /> Neuropathy (Highlight Evidence)
+                            </div>
+
+                            <div className="mt-2 mb-2 px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                Clinical Metrics
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('HbA1c Trajectory')}
+                            >
+                                <Activity size={14} className="text-muted-foreground" /> HbA1c Trajectory
+                            </div>
+                            <div
+                                className="px-3 py-2 hover:bg-black/5 rounded-lg cursor-pointer text-sm flex items-center gap-2"
+                                onClick={() => handleSelectOption('Blood Pressure Trends')}
+                            >
+                                <HeartPulse size={14} className="text-muted-foreground" /> Blood Pressure Trends
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Highlight Overlays (Glowing Border around targeted cards) */}
